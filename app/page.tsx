@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import lessonData from '../data/lesson.json';
+import lessonData from '../data/lessons/01-coffee-culture.json';
 
 type LevelKey = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
@@ -172,10 +172,14 @@ export default function Home() {
               <p className="text-sm text-neutral-400 mb-6">
                 Ouça o áudio completo atentamente sem tentar ler nenhum texto. Concentre-se no ritmo e no sentido geral.
               </p>
-              <audio controls className="w-full mb-6">
-                <source src={currentLevelData.audio} type="audio/mp3" />
-                Seu navegador não suporta áudio.
-              </audio>
+              <audio
+  key={`${level}-${step}`}
+  controls
+  src={currentLevelData.audio}
+  className="w-full mb-5"
+>
+  Seu navegador não suporta áudio.
+</audio>
               <button
                 onClick={() => setStep(2)}
                 className="w-full py-3 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"

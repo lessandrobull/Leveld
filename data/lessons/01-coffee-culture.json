@@ -9,7 +9,7 @@
   "levels": {
     "A1": {
       "level": "A1",
-      "audio": "/audio/coffee_a1.mp3",
+      "audio": "/audio/coffee-culture/a1.mp3",
       "fullText": "Many people drink coffee every morning. Coffee gives them good energy for the day. Some like it with milk and sugar.",
       "sentences": [
         "Many people drink coffee every morning.",
@@ -19,7 +19,7 @@
     },
     "A2": {
       "level": "A2",
-      "audio": "/audio/coffee_a2.mp3",
+      "audio": "/audio/coffee-culture/a2.mp3",
       "fullText": "Coffee is one of the most popular beverages in the world. People usually buy a cup on their way to work or meet friends at a local café.",
       "sentences": [
         "Coffee is one of the most popular beverages in the world.",
@@ -29,7 +29,7 @@
     },
     "B1": {
       "level": "B1",
-      "audio": "/audio/coffee_b1.mp3",
+      "audio": "/audio/coffee-culture/b1.mp3",
       "fullText": "Coffee culture has grown significantly over recent decades. While instant coffee was once the standard, many consumers now prefer freshly ground beans and specialized brewing methods.",
       "sentences": [
         "Coffee culture has grown significantly over recent decades.",
@@ -39,7 +39,7 @@
     },
     "B2": {
       "level": "B2",
-      "audio": "/audio/coffee_b2.mp3",
+      "audio": "/audio/coffee-culture/b2.mp3",
       "fullText": "The global coffee industry blends agricultural science with cultural ritual. Specialty cafés emphasize the bean's origin, roast profiles, and fair-trade sourcing practices.",
       "sentences": [
         "The global coffee industry blends agricultural science with cultural ritual.",
@@ -49,7 +49,7 @@
     },
     "C1": {
       "level": "C1",
-      "audio": "/audio/coffee_c1.mp3",
+      "audio": "/audio/coffee-culture/c1.mp3",
       "fullText": "Coffee houses historically served as intellectual hubs, fostering political discourse and Enlightenment philosophies. Today, they remain communal spaces, albeit transformed by the ubiquity of laptops and remote work.",
       "sentences": [
         "Coffee houses historically served as intellectual hubs, fostering political discourse.",
@@ -59,7 +59,7 @@
     },
     "C2": {
       "level": "C2",
-      "audio": "/audio/coffee_c2.mp3",
+      "audio": "/audio/coffee-culture/c2.mp3",
       "fullText": "The contemporary commodity trade in coffee is intrinsically entwined with geopolitical nuance and ecological precarity. From single-origin micro-lots to industrial extraction, its supply chain exemplifies the complexities of modern consumption.",
       "sentences": [
         "The contemporary commodity trade in coffee is intrinsically entwined with geopolitical nuance.",
