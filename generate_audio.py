@@ -4,15 +4,21 @@ import asyncio
 import os
 import edge_tts
 
-VOICE_FEMALE = "en-US-JennyNeural"
+# Vozes Multilingues Neurais (Natural)
+VOICE_AVA = "en-US-AvaMultilingualNeural"
+VOICE_ANDREW = "en-US-AndrewMultilingualNeural"
 
+# Escolha da voz (padrão Ava; para Andrew, altere para VOICE_ANDREW)
+SELECTED_VOICE = VOICE_AVA
+
+# Velocidades calibradas
 RATES = {
-    "A1": "-20%",
-    "A2": "-10%",
-    "B1": "+0%",
-    "B2": "+0%",
-    "C1": "+0%",
-    "C2": "+5%"
+    "A1": "-20%",  # 0.8
+    "A2": "-20%",  # 0.8
+    "B1": "-15%",  # 0.85
+    "B2": "-15%",  # 0.85
+    "C1": "-10%",  # 0.9
+    "C2": "-10%"   # 0.9
 }
 
 async def generate(file_path):
@@ -27,7 +33,7 @@ async def generate(file_path):
     output_dir = f"public/audio/{lesson_id}"
     os.makedirs(output_dir, exist_ok=True)
 
-    print(f"Processando lição: {data['title']} (ID: {lesson_id})\n")
+    print(f"Processando lição: {data['title']} (Voz: {SELECTED_VOICE})\n")
 
     for level, content in data["levels"].items():
         text = content["fullText"]
@@ -35,8 +41,8 @@ async def generate(file_path):
         file_name = f"{level.lower()}.mp3"
         output_file = os.path.join(output_dir, file_name)
 
-        print(f"-> Gerando áudio {level}...")
-        communicate = edge_tts.Communicate(text, VOICE_FEMALE, rate=rate)
+        print(f"-> Gerando {level} | Vel: {rate}...")
+        communicate = edge_tts.Communicate(text, SELECTED_VOICE, rate=rate)
         await communicate.save(output_file)
         
         content["audio"] = f"/audio/{lesson_id}/{file_name}"
@@ -44,7 +50,7 @@ async def generate(file_path):
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-    print(f"\nConcluído! Áudios salvos em: {output_dir}")
+    print(f"\nÁudios finalizados em: {output_dir}")
 
 if __name__ == "__main__":
     target_file = sys.argv[1] if len(sys.argv) > 1 else "data/lessons/01-coffee-culture.json"
