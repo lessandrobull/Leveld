@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import lessonData from '../data/lessons/01-coffee-culture.json';
 
 type LevelKey = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
@@ -8,376 +8,466 @@ type LevelKey = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 export default function Home() {
   const [level, setLevel] = useState<LevelKey>('A1');
   const [step, setStep] = useState<number>(1);
+  const [sentenceIndex, setSentenceIndex] = useState<number>(0);
 
-  // Estados dos exercícios
-  const [currentSentenceIdx, setCurrentSentenceIdx] = useState<number>(0);
+  // Estados do Exercício 3 (Arrastar/Ordenar palavras)
+  const [availableWords, setAvailableWords] = useState<string[]>([]);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
-  const [typedText, setTypedText] = useState<string>('');
-  
-  // Controle de validação e bloqueio
-  const [isCorrect, setIsCorrect] = useState<boolean>(false);
-  const [hasError, setHasError] = useState<boolean>(false);
-  const [isInputLocked, setIsInputLocked] = useState<boolean>(false);
+  const [orderFeedback, setOrderFeedback] = useState<'correct' | 'wrong' | null>(null);
+
+  // Estados do Exercício 4 (Digitação)
+  const [typedInput, setTypedInput] = useState<string>('');
+  const [typingFeedback, setTypingFeedback] = useState<'correct' | 'wrong' | null>(null);
+  const [isTypingLocked, setIsTypingLocked] = useState<boolean>(false);
 
   const currentLevelData = lessonData.levels[level];
-  const sentences = currentLevelData.sentences || [];
-  const currentSentence = sentences[currentSentenceIdx] || '';
+  const currentSentence = currentLevelData.sentences[sentenceIndex] || '';
 
-  // Reset de estado ao trocar nível ou etapa
-  useEffect(() => {
-    setCurrentSentenceIdx(0);
-    resetSentenceState();
-  }, [level, step]);
-
-  const resetSentenceState = () => {
-    setSelectedWords([]);
-    setTypedText('');
-    setIsCorrect(false);
-    setHasError(false);
-    setIsInputLocked(false);
-  };
-
-  // Validação: Ordenar Palavras (Etapa 3)
-  const handleWordClick = (word: string) => {
-    if (isCorrect) return;
-    setSelectedWords((prev) => [...prev, word]);
-  };
-
-  const handleRemoveWord = (index: number) => {
-    if (isCorrect) return;
-    setSelectedWords((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const verifyOrder = () => {
-    const formed = selectedWords.join(' ').trim().toLowerCase();
-    const target = currentSentence.trim().toLowerCase();
-    if (formed === target) {
-      setIsCorrect(true);
-      setHasError(false);
-    } else {
-      setHasError(true);
+  // Síntese de voz com as velocidades solicitadas: A1/A2 = 0.8, B1/B2 = 0.85, C1/C2 = 0.9
+  const speakSentence = (text: string) => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      if (level === 'A1' || level === 'A2') {
+        utterance.rate = 0.8;
+      } else if (level === 'B1' || level === 'B2') {
+        utterance.rate = 0.85;
+      } else {
+        utterance.rate = 0.9;
+      }
+      window.speechSynthesis.speak(utterance);
     }
   };
 
-  // Validação: Escrita (Etapa 4)
-  const verifyTyping = () => {
-    const typed = typedText.trim().toLowerCase();
-    const target = currentSentence.trim().toLowerCase();
+  // Prepara as palavras do exercício 3 ao mudar de frase
+  useEffect(() => {
+    if (step === 3 && currentSentence) {
+      const cleanWords = currentSentence
+        .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
+        .split(' ')
+        .filter(Boolean);
+      setAvailableWords([...cleanWords].sort(() => Math.random() - 0.5));
+      setSelectedWords([]);
+      setOrderFeedback(null);
+    }
+  }, [step, sentenceIndex, currentSentence]);
 
-    if (typed === target) {
-      setIsCorrect(true);
-      setHasError(false);
-      setIsInputLocked(true);
+  // Limpa estados ao trocar de etapa ou frase no exercício 4
+  useEffect(() => {
+    if (step === 4) {
+      setTypedInput('');
+      setTypingFeedback(null);
+      setIsTypingLocked(false);
+    }
+  }, [step, sentenceIndex]);
+
+  // Ação ao trocar de nível
+  const handleLevelChange = (lvl: LevelKey) => {
+    setLevel(lvl);
+    setStep(1);
+    setSentenceIndex(0);
+  };
+
+  // Validação do exercício 3
+  const handleWordClick = (word: string, fromAvailable: boolean) => {
+    if (orderFeedback === 'correct') return;
+    if (fromAvailable) {
+      const idx = availableWords.indexOf(word);
+      const updated = [...availableWords];
+      updated.splice(idx, 1);
+      setAvailableWords(updated);
+      setSelectedWords([...selectedWords, word]);
     } else {
-      setHasError(true);
-      setIsInputLocked(true); // Trava o campo para impedir edição sem reset
+      const idx = selectedWords.indexOf(word);
+      const updated = [...selectedWords];
+      updated.splice(idx, 1);
+      setSelectedWords(updated);
+      setAvailableWords([...availableWords, word]);
+    }
+  };
+
+  const checkOrder = () => {
+    const rawSentence = currentSentence.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase();
+    const constructed = selectedWords.join(' ').toLowerCase();
+    if (rawSentence === constructed) {
+      setOrderFeedback('correct');
+    } else {
+      setOrderFeedback('wrong');
+    }
+  };
+
+  // Validação do exercício 4 com trava
+  const checkTyping = () => {
+    const cleanOriginal = currentSentence.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').trim().toLowerCase();
+    const cleanTyped = typedInput.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').trim().toLowerCase();
+    if (cleanOriginal === cleanTyped) {
+      setTypingFeedback('correct');
+      setIsTypingLocked(true);
+    } else {
+      setTypingFeedback('wrong');
+      setIsTypingLocked(true); // Trava o texto para obrigar o clique em tentar de novo
     }
   };
 
   const handleRetryTyping = () => {
-    setIsInputLocked(false);
-    setHasError(false);
+    setIsTypingLocked(false);
+    setTypingFeedback(null);
   };
 
-  // Avanço de Frase (Só permite se isCorrect for true)
-  const handleNextSentence = () => {
-    if (!isCorrect) return;
-    if (currentSentenceIdx < sentences.length - 1) {
-      setCurrentSentenceIdx((prev) => prev + 1);
-      resetSentenceState();
+  const nextSentenceOrStep = () => {
+    if (sentenceIndex + 1 < currentLevelData.sentences.length) {
+      setSentenceIndex(sentenceIndex + 1);
+    } else {
+      setSentenceIndex(0);
+      setStep((prev) => Math.min(prev + 1, 6));
     }
   };
 
-  const isLastSentence = currentSentenceIdx === sentences.length - 1;
-  const isExerciseFinished = isLastSentence && isCorrect;
-
   return (
-    <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col items-center p-6">
-      <div className="w-full max-w-2xl">
-        {/* Cabeçalho */}
-        <header className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-neutral-100">{lessonData.title}</h1>
-          <p className="text-sm text-neutral-400 mt-1">ReadingHub • Prática Guiada</p>
+    <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col justify-between p-4 sm:p-6 font-sans">
+      <div className="max-w-2xl mx-auto w-full">
+        {/* Header / Seletor de Nível */}
+        <header className="mb-6 pb-4 border-b border-neutral-800">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-xl font-bold tracking-tight text-white">ReadingHub</h1>
+            <span className="text-xs bg-neutral-800 text-neutral-400 px-2 py-1 rounded">
+              {lessonData.title}
+            </span>
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as LevelKey[]).map((lvl) => (
+              <button
+                key={lvl}
+                onClick={() => handleLevelChange(lvl)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                  level === lvl
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-neutral-900 text-neutral-400 hover:bg-neutral-800'
+                }`}
+              >
+                {lvl}
+              </button>
+            ))}
+          </div>
         </header>
 
-        {/* Seletor de Níveis */}
-        <div className="flex justify-center gap-2 mb-6">
-          {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as LevelKey[]).map((lvl) => (
-            <button
-              key={lvl}
-              onClick={() => setLevel(lvl)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition ${
-                level === lvl
-                  ? 'bg-neutral-100 text-neutral-950'
-                  : 'bg-neutral-800 text-neutral-400 hover:text-neutral-200'
-              }`}
-            >
-              {lvl}
-            </button>
-          ))}
+        {/* Indicador de Etapas */}
+        <div className="mb-6">
+          <div className="flex justify-between text-xs text-neutral-400 mb-2">
+            <span>Etapa {step} de 6</span>
+            <span className="font-medium text-neutral-300">
+              {step === 1 && '1. Escuta Global (Input Cego)'}
+              {step === 2 && '2. Leitura com Áudio (Decodificação)'}
+              {step === 3 && '3. Reconstrução Sintática'}
+              {step === 4 && '4. Ditado & Digitação'}
+              {step === 5 && '5. Repetição Oral'}
+              {step === 6 && '6. Shadowing Mental & Autonomia'}
+            </span>
+          </div>
+          <div className="w-full bg-neutral-800 h-1.5 rounded-full overflow-hidden">
+            <div
+              className="bg-blue-500 h-full transition-all duration-300"
+              style={{ width: `${(step / 6) * 100}%` }}
+            />
+          </div>
         </div>
 
-        {/* Navegador de Etapas */}
-        <div className="grid grid-cols-6 gap-1 bg-neutral-900 p-1.5 rounded-xl mb-6">
-          {[1, 2, 3, 4, 5, 6].map((s) => (
-            <button
-              key={s}
-              onClick={() => setStep(s)}
-              className={`py-1.5 rounded-lg text-xs font-medium transition ${
-                step === s
-                  ? 'bg-neutral-800 text-neutral-100 font-bold'
-                  : 'text-neutral-500 hover:text-neutral-300'
-              }`}
-            >
-              Passo {s}
-            </button>
-          ))}
-        </div>
-
-        {/* Container Principal */}
-        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 shadow-xl">
-          {/* ETAPA 1: Listening */}
+        {/* Conteúdo da Etapa */}
+        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 mb-6 shadow-sm">
+          {/* ETAPA 1: Escuta Global */}
           {step === 1 && (
-            <div>
-              <span className="text-xs uppercase tracking-wider text-neutral-500 font-bold">Etapa 1: Escuta Atenta</span>
-              <p className="text-sm text-neutral-400 mt-1 mb-5">Ouça o áudio completo sem ler o texto.</p>
-              <audio key={`${level}-1`} controls src={currentLevelData.audio} className="w-full mb-4">
+            <div className="flex flex-col items-center text-center">
+              <img
+                src={lessonData.image}
+                alt={lessonData.title}
+                className="w-full h-48 sm:h-56 object-cover rounded-xl mb-4"
+              />
+              <h2 className="text-xl font-bold mb-2">{lessonData.title}</h2>
+              <p className="text-sm text-neutral-400 mb-6">
+                Ouça o áudio completo atentamente sem tentar ler nenhum texto. Concentre-se no ritmo e no sentido geral.
+              </p>
+              <audio
+                key={`${level}-${step}`}
+                controls
+                src={currentLevelData.audio}
+                className="w-full mb-5"
+              >
                 Seu navegador não suporta áudio.
               </audio>
+              <button
+                onClick={() => setStep(2)}
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
+              >
+                Próxima Etapa: Leitura Guiada
+              </button>
             </div>
           )}
 
-          {/* ETAPA 2: Leitura + Áudio */}
+          {/* ETAPA 2: Leitura Guiada */}
           {step === 2 && (
             <div>
-              <span className="text-xs uppercase tracking-wider text-neutral-500 font-bold">Etapa 2: Leitura e Escuta</span>
-              <audio key={`${level}-2`} controls src={currentLevelData.audio} className="w-full my-4">
+              <h2 className="text-lg font-bold mb-3">{lessonData.title}</h2>
+              <audio
+                key={`${level}-${step}`}
+                controls
+                src={currentLevelData.audio}
+                className="w-full mb-5"
+              >
                 Seu navegador não suporta áudio.
               </audio>
-              <div className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-200 leading-relaxed text-base">
+              <div className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-200 leading-relaxed text-base mb-6">
                 {currentLevelData.fullText}
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setStep(1)}
+                  className="w-1/3 py-3 bg-neutral-800 hover:bg-neutral-700 font-semibold rounded-xl text-sm text-neutral-300 transition"
+                >
+                  Voltar
+                </button>
+                <button
+                  onClick={() => {
+                    setSentenceIndex(0);
+                    setStep(3);
+                  }}
+                  className="w-2/3 py-3 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
+                >
+                  Iniciar Exercícios
+                </button>
               </div>
             </div>
           )}
 
-          {/* ETAPA 3: Sintaxe / Ordenar Palavras */}
+          {/* ETAPA 3: Montar a Frase */}
           {step === 3 && (
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-xs uppercase tracking-wider text-neutral-500 font-bold">Etapa 3: Sintaxe</span>
-                <span className="text-xs text-neutral-500 font-mono">
-                  {currentSentenceIdx + 1} / {sentences.length}
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-xs text-neutral-400">
+                  Frase {sentenceIndex + 1} de {currentLevelData.sentences.length}
                 </span>
+                <button
+                  onClick={() => speakSentence(currentSentence)}
+                  className="flex items-center gap-1.5 px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
+                >
+                  Ouvir Frase 🔊
+                </button>
               </div>
-              <p className="text-sm text-neutral-400 mb-4">Organize as palavras na ordem correta:</p>
 
               {/* Área de montagem */}
-              <div className="min-h-[56px] p-3 bg-neutral-950 border border-neutral-800 rounded-xl mb-4 flex flex-wrap gap-2 items-center">
-                {selectedWords.length === 0 && (
-                  <span className="text-neutral-600 text-sm">Clique nas palavras abaixo...</span>
+              <div className="min-h-16 p-3 bg-neutral-950 border border-dashed border-neutral-700 rounded-xl flex flex-wrap gap-2 items-center mb-4">
+                {selectedWords.length === 0 ? (
+                  <span className="text-xs text-neutral-500">Toque nas palavras abaixo para ordenar...</span>
+                ) : (
+                  selectedWords.map((word, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleWordClick(word, false)}
+                      className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-500 transition"
+                    >
+                      {word}
+                    </button>
+                  ))
                 )}
-                {selectedWords.map((word, i) => (
+              </div>
+
+              {/* Palavras disponíveis */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {availableWords.map((word, i) => (
                   <button
                     key={i}
-                    disabled={isCorrect}
-                    onClick={() => handleRemoveWord(i)}
-                    className="px-3 py-1 bg-neutral-800 border border-neutral-700 rounded-lg text-sm text-neutral-200 hover:bg-neutral-700"
+                    onClick={() => handleWordClick(word, true)}
+                    className="px-3 py-1.5 bg-neutral-800 text-neutral-300 text-sm rounded-lg hover:bg-neutral-700 transition"
                   >
                     {word}
                   </button>
                 ))}
               </div>
 
-              {/* Banco de palavras */}
-              <div className="flex flex-wrap gap-2 mb-5">
-                {currentSentence
-                  .split(' ')
-                  .sort()
-                  .map((word, i) => (
-                    <button
-                      key={i}
-                      disabled={isCorrect}
-                      onClick={() => handleWordClick(word)}
-                      className="px-3 py-1.5 bg-neutral-950 border border-neutral-800 hover:border-neutral-600 rounded-lg text-sm text-neutral-300 transition"
-                    >
-                      {word}
-                    </button>
-                  ))}
-              </div>
+              {orderFeedback && (
+                <p
+                  className={`text-xs font-semibold mb-4 ${
+                    orderFeedback === 'correct' ? 'text-emerald-400' : 'text-rose-400'
+                  }`}
+                >
+                  {orderFeedback === 'correct' ? 'Excelente! Ordem correta.' : 'Incorreto. Tente reorganizar.'}
+                </p>
+              )}
 
-              {/* Feedback e Botões */}
-              <div className="flex items-center gap-3">
-                {!isCorrect && (
-                  <button
-                    onClick={verifyOrder}
-                    className="px-4 py-2 bg-neutral-100 text-neutral-950 font-semibold text-sm rounded-lg hover:bg-neutral-200 transition"
-                  >
-                    Verificar
-                  </button>
-                )}
-
-                {hasError && <span className="text-red-400 text-sm font-medium">Ordem incorreta. Tente novamente.</span>}
-                {isCorrect && <span className="text-green-400 text-sm font-medium">Correto!</span>}
-
-                {/* Avanço estritamente condicionado ao acerto */}
-                {isCorrect && !isLastSentence && (
-                  <button
-                    onClick={handleNextSentence}
-                    className="ml-auto px-4 py-2 bg-neutral-800 text-neutral-100 font-semibold text-sm rounded-lg hover:bg-neutral-700"
-                  >
-                    Próxima Frase →
-                  </button>
-                )}
+              <div className="flex gap-2">
+                <button
+                  onClick={checkOrder}
+                  className="w-1/2 py-2.5 bg-neutral-800 hover:bg-neutral-700 font-semibold rounded-xl text-sm transition"
+                >
+                  Checar
+                </button>
+                <button
+                  onClick={nextSentenceOrStep}
+                  disabled={orderFeedback !== 'correct'}
+                  className="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition"
+                >
+                  Avançar
+                </button>
               </div>
             </div>
           )}
 
-          {/* ETAPA 4: Escrita / Ditado */}
+          {/* ETAPA 4: Digitação */}
           {step === 4 && (
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-xs uppercase tracking-wider text-neutral-500 font-bold">Etapa 4: Escrita</span>
-                <span className="text-xs text-neutral-500 font-mono">
-                  {currentSentenceIdx + 1} / {sentences.length}
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-xs text-neutral-400">
+                  Frase {sentenceIndex + 1} de {currentLevelData.sentences.length}
                 </span>
+                <button
+                  onClick={() => speakSentence(currentSentence)}
+                  className="flex items-center gap-1.5 px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
+                >
+                  Ouvir Trecho 🔊
+                </button>
               </div>
-              <p className="text-sm text-neutral-400 mb-3">Digite a frase exata correspondente:</p>
 
-              <div className="p-3 bg-neutral-950 rounded-lg border border-neutral-800 text-sm text-neutral-400 mb-4 italic">
-                Alvo: "{currentSentence}"
-              </div>
+              <p className="text-xs text-neutral-400 mb-3">
+                Escute o áudio da frase e digite exatamente o que ouviu:
+              </p>
 
-              {/* Input com trava mecânica */}
-              <input
-                type="text"
-                disabled={isInputLocked}
-                value={typedText}
-                onChange={(e) => setTypedText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !isInputLocked) verifyTyping();
-                }}
+              <textarea
+                value={typedInput}
+                disabled={isTypingLocked}
+                onChange={(e) => setTypedInput(e.target.value)}
                 placeholder="Digite a frase aqui..."
-                className={`w-full p-3 rounded-xl bg-neutral-950 border text-sm transition outline-none mb-4 ${
-                  hasError
-                    ? 'border-red-500 text-red-300'
-                    : isCorrect
-                    ? 'border-green-500 text-green-300'
-                    : 'border-neutral-800 focus:border-neutral-600 text-neutral-100'
-                } ${isInputLocked ? 'opacity-60 cursor-not-allowed' : ''}`}
+                rows={3}
+                className={`w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 mb-3 resize-none ${
+                  isTypingLocked ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               />
 
-              <div className="flex items-center gap-3">
-                {!isCorrect && !hasError && (
-                  <button
-                    onClick={verifyTyping}
-                    className="px-4 py-2 bg-neutral-100 text-neutral-950 font-semibold text-sm rounded-lg hover:bg-neutral-200 transition"
-                  >
-                    Verificar
-                  </button>
-                )}
+              {typingFeedback && (
+                <div className="mb-4">
+                  {typingFeedback === 'correct' ? (
+                    <p className="text-xs font-semibold text-emerald-400">Muito bem! Frase digitada corretamente.</p>
+                  ) : (
+                    <div>
+                      <p className="text-xs font-semibold text-rose-400 mb-1">Diferente do esperado.</p>
+                      <p className="text-xs text-neutral-400 mb-2">
+                        Esperado: <span className="text-neutral-200">{currentSentence}</span>
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleRetryTyping}
+                        className="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-lg text-xs font-medium transition"
+                      >
+                        Tentar de novo
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
-                {/* Exibição quando diferente do esperado com botão obrigatório para destravar */}
-                {hasError && (
-                  <div className="flex items-center gap-3">
-                    <span className="text-red-400 text-sm font-medium">Diferente do esperado</span>
-                    <button
-                      onClick={handleRetryTyping}
-                      className="px-3 py-1.5 bg-neutral-800 border border-neutral-700 hover:bg-neutral-700 text-xs font-semibold text-neutral-200 rounded-lg transition"
-                    >
-                      Tentar novamente
-                    </button>
-                  </div>
-                )}
-
-                {isCorrect && <span className="text-green-400 text-sm font-medium">Perfeito!</span>}
-
-                {/* Avanço bloqueado até o acerto */}
-                {isCorrect && !isLastSentence && (
-                  <button
-                    onClick={handleNextSentence}
-                    className="ml-auto px-4 py-2 bg-neutral-800 text-neutral-100 font-semibold text-sm rounded-lg hover:bg-neutral-700"
-                  >
-                    Próxima Frase →
-                  </button>
-                )}
+              <div className="flex gap-2">
+                <button
+                  onClick={checkTyping}
+                  disabled={isTypingLocked && typingFeedback === 'wrong'}
+                  className="w-1/2 py-2.5 bg-neutral-800 hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition"
+                >
+                  Checar Digitação
+                </button>
+                <button
+                  onClick={nextSentenceOrStep}
+                  disabled={typingFeedback !== 'correct'}
+                  className="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition"
+                >
+                  Avançar
+                </button>
               </div>
             </div>
           )}
 
-          {/* ETAPA 5: Repetição / Fala */}
+          {/* ETAPA 5: Repetição Oral */}
           {step === 5 && (
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-xs uppercase tracking-wider text-neutral-500 font-bold">Etapa 5: Fala e Repetição</span>
-                <span className="text-xs text-neutral-500 font-mono">
-                  {currentSentenceIdx + 1} / {sentences.length}
+            <div className="text-center">
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-xs text-neutral-400">
+                  Frase {sentenceIndex + 1} de {currentLevelData.sentences.length}
                 </span>
+                <button
+                  onClick={() => speakSentence(currentSentence)}
+                  className="flex items-center gap-1.5 px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
+                >
+                  Ouvir Modelo 🔊
+                </button>
               </div>
-              <p className="text-sm text-neutral-400 mb-4">Leia a frase em voz alta praticando a pronúncia:</p>
 
-              <div className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 text-lg text-neutral-100 mb-5 font-medium">
+              <div className="p-4 bg-neutral-950 border border-neutral-800 rounded-xl text-base font-medium text-neutral-200 mb-6">
                 "{currentSentence}"
               </div>
 
-              <div className="flex items-center gap-3">
-                {!isCorrect ? (
-                  <button
-                    onClick={() => setIsCorrect(true)}
-                    className="px-4 py-2 bg-neutral-100 text-neutral-950 font-semibold text-sm rounded-lg hover:bg-neutral-200 transition"
-                  >
-                    Concluir Leitura
-                  </button>
-                ) : (
-                  <span className="text-green-400 text-sm font-medium">Concluído!</span>
-                )}
+              <p className="text-xs text-neutral-400 mb-6">
+                Escute o modelo com atenção e repita a frase em voz alta 2 a 3 vezes, focando no ritmo e na entonação.
+              </p>
 
-                {/* Avanço liberado apenas após confirmação */}
-                {isCorrect && !isLastSentence && (
-                  <button
-                    onClick={handleNextSentence}
-                    className="ml-auto px-4 py-2 bg-neutral-800 text-neutral-100 font-semibold text-sm rounded-lg hover:bg-neutral-700"
-                  >
-                    Próxima Frase →
-                  </button>
-                )}
-              </div>
+              <button
+                onClick={nextSentenceOrStep}
+                className="w-full py-3 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
+              >
+                Próxima Frase
+              </button>
             </div>
           )}
 
-          {/* ETAPA 6: Síntese Final */}
+          {/* ETAPA 6: Shadowing Mental e Leitura Solo */}
           {step === 6 && (
             <div>
-              <span className="text-xs uppercase tracking-wider text-neutral-500 font-bold">Etapa 6: Síntese e Fixação</span>
-              <p className="text-sm text-neutral-400 mt-1 mb-4">Ouça mais uma vez acompanhando o texto mentalmente.</p>
-              <audio key={`${level}-6`} controls src={currentLevelData.audio} className="w-full mb-4">
+              <h2 className="text-lg font-bold mb-2">Consolidação e Autonomia</h2>
+              <div className="p-3.5 bg-neutral-950 border border-blue-900/40 rounded-xl text-xs text-neutral-300 mb-5 leading-relaxed">
+                <strong className="text-blue-400">Orientações Finais:</strong>
+                <ol className="list-decimal ml-4 mt-1 space-y-1">
+                  <li>Dê o play no áudio abaixo e faça <strong>shadowing mental</strong> (reproduza a voz na cabeça, na mesma velocidade e ritmo).</li>
+                  <li>Em seguida, faça a <strong>leitura do texto completo em voz alta sozinho</strong>.</li>
+                </ol>
+              </div>
+
+              <audio
+                key={`${level}-${step}`}
+                controls
+                src={currentLevelData.audio}
+                className="w-full mb-5"
+              >
                 Seu navegador não suporta áudio.
               </audio>
-              <div className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-300 leading-relaxed text-sm">
+
+              <div className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-200 leading-relaxed text-base mb-6">
                 {currentLevelData.fullText}
               </div>
+
+              <button
+                onClick={() => {
+                  setStep(1);
+                  setSentenceIndex(0);
+                }}
+                className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-xl text-sm transition"
+              >
+                Concluir e Voltar ao Início
+              </button>
             </div>
           )}
         </div>
 
-        {/* Rodapé de Navegação Entre Etapas */}
-        <footer className="flex justify-between items-center mt-6">
-          <button
-            disabled={step === 1}
-            onClick={() => setStep((s) => Math.max(1, s - 1))}
-            className="px-4 py-2 rounded-lg text-sm font-medium bg-neutral-900 border border-neutral-800 text-neutral-400 disabled:opacity-30 disabled:cursor-not-allowed hover:text-neutral-200"
+        {/* Patrocinador Discreto e Nativo */}
+        <aside className="p-3 bg-neutral-900/70 border border-neutral-800/80 rounded-xl text-xs flex items-center justify-between">
+          <span className="text-neutral-400">
+            {lessonData.sponsor.text}
+          </span>
+          <a
+            href={lessonData.sponsor.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:underline font-medium ml-2 shrink-0"
           >
-            ← Etapa Anterior
-          </button>
-
-          {/* Só permite pular de etapa nos exercícios se tiver terminado as frases com sucesso */}
-          <button
-            disabled={step === 6 || ([3, 4, 5].includes(step) && !isExerciseFinished)}
-            onClick={() => setStep((s) => Math.min(6, s + 1))}
-            className="px-4 py-2 rounded-lg text-sm font-semibold bg-neutral-100 text-neutral-950 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-200 transition"
-          >
-            Próxima Etapa →
-          </button>
-        </footer>
+            Saiba mais →
+          </a>
+        </aside>
       </div>
     </main>
   );
