@@ -15,6 +15,11 @@
         "Many people drink coffee every morning.",
         "Coffee gives them good energy for the day.",
         "Some like it with milk and sugar."
+      ],
+      "sentenceAudios": [
+        "/audio/coffee-culture/a1_s0.mp3",
+        "/audio/coffee-culture/a1_s1.mp3",
+        "/audio/coffee-culture/a1_s2.mp3"
       ]
     },
     "A2": {
@@ -25,6 +30,11 @@
         "Coffee is one of the most popular beverages in the world.",
         "People usually buy a cup on their way to work.",
         "They also meet friends at a local café."
+      ],
+      "sentenceAudios": [
+        "/audio/coffee-culture/a2_s0.mp3",
+        "/audio/coffee-culture/a2_s1.mp3",
+        "/audio/coffee-culture/a2_s2.mp3"
       ]
     },
     "B1": {
@@ -35,6 +45,11 @@
         "Coffee culture has grown significantly over recent decades.",
         "While instant coffee was once the standard, many consumers now prefer freshly ground beans.",
         "Specialized brewing methods are becoming widely appreciated."
+      ],
+      "sentenceAudios": [
+        "/audio/coffee-culture/b1_s0.mp3",
+        "/audio/coffee-culture/b1_s1.mp3",
+        "/audio/coffee-culture/b1_s2.mp3"
       ]
     },
     "B2": {
@@ -45,6 +60,11 @@
         "The global coffee industry blends agricultural science with cultural ritual.",
         "Specialty cafés emphasize the bean's origin and roast profiles.",
         "Fair-trade sourcing practices are increasingly prioritized by consumers."
+      ],
+      "sentenceAudios": [
+        "/audio/coffee-culture/b2_s0.mp3",
+        "/audio/coffee-culture/b2_s1.mp3",
+        "/audio/coffee-culture/b2_s2.mp3"
       ]
     },
     "C1": {
@@ -55,6 +75,11 @@
         "Coffee houses historically served as intellectual hubs, fostering political discourse.",
         "They provided spaces where Enlightenment philosophies could flourish.",
         "Today, they remain communal spaces, albeit transformed by remote work."
+      ],
+      "sentenceAudios": [
+        "/audio/coffee-culture/c1_s0.mp3",
+        "/audio/coffee-culture/c1_s1.mp3",
+        "/audio/coffee-culture/c1_s2.mp3"
       ]
     },
     "C2": {
@@ -65,6 +90,11 @@
         "The contemporary commodity trade in coffee is intrinsically entwined with geopolitical nuance.",
         "Ecological precarity poses a growing threat to traditional cultivation zones.",
         "Its supply chain exemplifies the ethical complexities of modern global consumption."
+      ],
+      "sentenceAudios": [
+        "/audio/coffee-culture/c2_s0.mp3",
+        "/audio/coffee-culture/c2_s1.mp3",
+        "/audio/coffee-culture/c2_s2.mp3"
       ]
     }
   }

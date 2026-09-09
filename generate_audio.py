@@ -4,14 +4,9 @@ import asyncio
 import os
 import edge_tts
 
-# Vozes Multilingues Neurais (Natural)
-VOICE_AVA = "en-US-AvaMultilingualNeural"
-VOICE_ANDREW = "en-US-AndrewMultilingualNeural"
+# Voz Neural Selecionada: Andrew
+SELECTED_VOICE = "en-US-AndrewMultilingualNeural"
 
-# Escolha da voz (padrão Ava; para Andrew, altere para VOICE_ANDREW)
-SELECTED_VOICE = VOICE_AVA
-
-# Velocidades calibradas
 RATES = {
     "A1": "-20%",  # 0.8
     "A2": "-20%",  # 0.8
@@ -33,24 +28,33 @@ async def generate(file_path):
     output_dir = f"public/audio/{lesson_id}"
     os.makedirs(output_dir, exist_ok=True)
 
-    print(f"Processando lição: {data['title']} (Voz: {SELECTED_VOICE})\n")
+    print(f"Gerando áudios com a voz do Andrew ({SELECTED_VOICE}) para: {data['title']}\n")
 
     for level, content in data["levels"].items():
-        text = content["fullText"]
         rate = RATES.get(level, "+0%")
-        file_name = f"{level.lower()}.mp3"
-        output_file = os.path.join(output_dir, file_name)
-
-        print(f"-> Gerando {level} | Vel: {rate}...")
-        communicate = edge_tts.Communicate(text, SELECTED_VOICE, rate=rate)
-        await communicate.save(output_file)
         
-        content["audio"] = f"/audio/{lesson_id}/{file_name}"
+        # 1. Áudio completo do nível (Passos 1, 2 e 6)
+        full_file_name = f"{level.lower()}.mp3"
+        full_output_path = os.path.join(output_dir, full_file_name)
+        print(f"-> [{level}] Gerando texto completo...")
+        comm = edge_tts.Communicate(content["fullText"], SELECTED_VOICE, rate=rate)
+        await comm.save(full_output_path)
+        content["audio"] = f"/audio/{lesson_id}/{full_file_name}"
+
+        # 2. Áudios individuais por frase (Passos 3, 4 e 5)
+        content["sentenceAudios"] = []
+        for idx, sentence in enumerate(content.get("sentences", [])):
+            s_file_name = f"{level.lower()}_s{idx}.mp3"
+            s_output_path = os.path.join(output_dir, s_file_name)
+            print(f"   -> [{level}] Frase {idx + 1}: \"{sentence[:30]}...\"")
+            s_comm = edge_tts.Communicate(sentence, SELECTED_VOICE, rate=rate)
+            await s_comm.save(s_output_path)
+            content["sentenceAudios"].append(f"/audio/{lesson_id}/{s_file_name}")
 
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
 
-    print(f"\nÁudios finalizados em: {output_dir}")
+    print(f"\nTodos os áudios neurais do Andrew foram salvos em: {output_dir}")
 
 if __name__ == "__main__":
     target_file = sys.argv[1] if len(sys.argv) > 1 else "data/lessons/01-coffee-culture.json"

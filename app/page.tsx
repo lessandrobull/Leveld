@@ -24,19 +24,12 @@ export default function Home() {
   const currentSentence = currentLevelData.sentences[sentenceIndex] || '';
 
   // Síntese de voz com as velocidades solicitadas: A1/A2 = 0.8, B1/B2 = 0.85, C1/C2 = 0.9
-  const speakSentence = (text: string) => {
-    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'en-US';
-      if (level === 'A1' || level === 'A2') {
-        utterance.rate = 0.8;
-      } else if (level === 'B1' || level === 'B2') {
-        utterance.rate = 0.85;
-      } else {
-        utterance.rate = 0.9;
-      }
-      window.speechSynthesis.speak(utterance);
+  // Toca a gravação neural do Andrew para a frase atual
+  const speakSentence = (_text: string) => {
+    const audios = (currentLevelData as any).sentenceAudios;
+    if (audios && audios[sentenceIndex]) {
+      const audio = new Audio(audios[sentenceIndex]);
+      audio.play().catch((err) => console.error("Erro ao tocar áudio:", err));
     }
   };
 
