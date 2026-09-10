@@ -35,17 +35,29 @@
       "gaps": [
         {
           "target": "coffee",
-          "options": ["tea", "coffee", "juice"],
+          "options": [
+            "tea",
+            "coffee",
+            "juice"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "morning",
-          "options": ["night", "morning", "winter"],
+          "options": [
+            "night",
+            "morning",
+            "winter"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "habit",
-          "options": ["habit", "problem", "secret"],
+          "options": [
+            "habit",
+            "problem",
+            "secret"
+          ],
           "sentenceIndex": 3
         }
       ]
@@ -77,17 +89,29 @@
       "gaps": [
         {
           "target": "culture",
-          "options": ["culture", "recipe", "sport"],
+          "options": [
+            "culture",
+            "recipe",
+            "sport"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "routine",
-          "options": ["routine", "journey", "kitchen"],
+          "options": [
+            "routine",
+            "journey",
+            "kitchen"
+          ],
           "sentenceIndex": 2
         },
         {
           "target": "study",
-          "options": ["sleep", "fight", "study"],
+          "options": [
+            "sleep",
+            "fight",
+            "study"
+          ],
           "sentenceIndex": 3
         }
       ]
@@ -117,17 +141,29 @@
       "gaps": [
         {
           "target": "transform",
-          "options": ["ignore", "transform", "destroy"],
+          "options": [
+            "ignore",
+            "transform",
+            "destroy"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "sustainable",
-          "options": ["synthetic", "sustainable", "dangerous"],
+          "options": [
+            "synthetic",
+            "sustainable",
+            "dangerous"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "productivity",
-          "options": ["productivity", "silence", "competition"],
+          "options": [
+            "productivity",
+            "silence",
+            "competition"
+          ],
           "sentenceIndex": 2
         }
       ]
@@ -157,17 +193,29 @@
       "gaps": [
         {
           "target": "sensory",
-          "options": ["sensory", "hostile", "mechanical"],
+          "options": [
+            "sensory",
+            "hostile",
+            "mechanical"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "fair-trade",
-          "options": ["fair-trade", "careless", "automated"],
+          "options": [
+            "fair-trade",
+            "careless",
+            "automated"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "sanctuaries",
-          "options": ["factories", "sanctuaries", "warehouses"],
+          "options": [
+            "factories",
+            "sanctuaries",
+            "warehouses"
+          ],
           "sentenceIndex": 2
         }
       ]
@@ -197,17 +245,29 @@
       "gaps": [
         {
           "target": "anthropological",
-          "options": ["accidental", "anthropological", "monetary"],
+          "options": [
+            "accidental",
+            "anthropological",
+            "monetary"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "catalyst",
-          "options": ["barrier", "catalyst", "substitute"],
+          "options": [
+            "barrier",
+            "catalyst",
+            "substitute"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "communal",
-          "options": ["isolated", "communal", "artificial"],
+          "options": [
+            "isolated",
+            "communal",
+            "artificial"
+          ],
           "sentenceIndex": 2
         }
       ]
@@ -235,17 +295,29 @@
       "gaps": [
         {
           "target": "transmuted",
-          "options": ["demolished", "transmuted", "concealed"],
+          "options": [
+            "demolished",
+            "transmuted",
+            "concealed"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "discourse",
-          "options": ["discourse", "silence", "stagnation"],
+          "options": [
+            "discourse",
+            "silence",
+            "stagnation"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "convivial",
-          "options": ["hostile", "rigid", "convivial"],
+          "options": [
+            "hostile",
+            "rigid",
+            "convivial"
+          ],
           "sentenceIndex": 1
         }
       ]
