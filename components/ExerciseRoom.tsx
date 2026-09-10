@@ -67,12 +67,6 @@ export default function ExerciseRoom() {
     }
   }, [step, sentenceIndex]);
 
-  const handleLevelChange = (lvl: LevelKey) => {
-    setLevel(lvl);
-    setStep(1);
-    setSentenceIndex(0);
-  };
-
   const handleWordClick = (word: string, fromAvailable: boolean) => {
     if (orderFeedback === 'correct') return;
     if (fromAvailable) {
@@ -130,7 +124,7 @@ export default function ExerciseRoom() {
     <main className="h-screen max-h-screen bg-neutral-950 text-neutral-100 flex flex-col p-3 sm:p-5 font-sans overflow-hidden">
       <div className="max-w-2xl mx-auto w-full flex-1 flex flex-col min-h-0">
         
-        {/* LINHA 1: Nome da página (ReadingHub) e Nível */}
+        {/* LINHA 1: Nome da página (ReadingHub) e Nível Estático */}
         <header className="flex items-center justify-between pb-2 shrink-0">
           <div className="flex items-center gap-3">
             <Link
@@ -143,20 +137,11 @@ export default function ExerciseRoom() {
             <h1 className="text-lg font-bold tracking-tight text-white">ReadingHub</h1>
           </div>
 
-          <div className="flex gap-1">
-            {(['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as LevelKey[]).map((lvl) => (
-              <button
-                key={lvl}
-                onClick={() => handleLevelChange(lvl)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition ${
-                  level === lvl
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-neutral-900 text-neutral-400 hover:bg-neutral-800'
-                }`}
-              >
-                {lvl}
-              </button>
-            ))}
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-neutral-400">Nível:</span>
+            <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white">
+              {level}
+            </span>
           </div>
         </header>
 
@@ -167,7 +152,7 @@ export default function ExerciseRoom() {
           </h2>
         </div>
 
-        {/* LINHA 3 ATÉ O BOTTOM: Card de tamanho fixo */}
+        {/* LINHA 3 ATÉ O BOTTOM: Card de tamanho fixo com rolagem interna */}
         <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 sm:p-6 shadow-sm flex-1 min-h-0 overflow-y-auto flex flex-col justify-between">
           <div>
             {/* Indicador de Etapas */}
@@ -465,21 +450,6 @@ export default function ExerciseRoom() {
               </div>
             )}
           </div>
-
-          {/* Patrocinador Discreto */}
-          <aside className="p-2.5 bg-neutral-950/80 border border-neutral-800/80 rounded-xl text-xs flex items-center justify-between mt-4 shrink-0">
-            <span className="text-neutral-400 truncate">
-              {lessonData.sponsor.text}
-            </span>
-            <a
-              href={lessonData.sponsor.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-400 hover:underline font-medium ml-2 shrink-0"
-            >
-              Saiba mais →
-            </a>
-          </aside>
         </div>
 
       </div>
