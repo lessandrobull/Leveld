@@ -161,7 +161,7 @@ export default function ExerciseRoom() {
           </div>
         </header>
 
-        {/* LINHA 2: Título do Texto Centralizado */}
+        {/* LINHA 2: Título Centralizado */}
         <div className="pb-2.5 shrink-0 text-center">
           <h2 className="text-base sm:text-lg font-semibold text-neutral-200 truncate">
             {lessonData.title}
@@ -172,10 +172,10 @@ export default function ExerciseRoom() {
         <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 sm:p-5 shadow-sm flex-1 min-h-0 overflow-y-auto flex flex-col justify-between">
           <div className="flex-1 flex flex-col min-h-0">
             
-            {/* BLOCO SUPERIOR: Foto à esquerda no PC, Barra + Orientações + Player/Botão à direita */}
+            {/* BLOCO SUPERIOR */}
             <div className="flex flex-col md:flex-row md:items-start gap-4 mb-3 shrink-0">
               
-              {/* Imagem: Oculta no mobile apenas na Etapa 2 | Tamanho do catálogo no mobile | Ampliada no PC */}
+              {/* Imagem */}
               <div className={`${step === 2 ? 'hidden md:block' : 'block'} shrink-0`}>
                 <img
                   src={lessonData.image}
@@ -184,22 +184,12 @@ export default function ExerciseRoom() {
                 />
               </div>
 
-              {/* Coluna Direita (PC) / Superior (Mobile): Progresso e Orientações */}
+              {/* Coluna Direita (PC) / Superior (Mobile) */}
               <div className="flex-1 flex flex-col justify-between min-w-0">
-                {/* Barra de Progresso das 8 Etapas */}
+                {/* Progresso das Etapas (Apenas contagem) */}
                 <div className="mb-2">
                   <div className="flex justify-between text-xs text-neutral-400 mb-1">
                     <span>Etapa {step} de 8</span>
-                    <span className="font-medium text-neutral-300">
-                      {step === 1 && '1. Compreensão Global'}
-                      {step === 2 && '2. Atenção Seletiva (Lacunas)'}
-                      {step === 3 && '3. Consciência Sintática'}
-                      {step === 4 && '4. Codificação Fonema-Grafema'}
-                      {step === 5 && '5. Produção Oral Assistida'}
-                      {step === 6 && '6. Memória Auditiva Pura'}
-                      {step === 7 && '7. Decodificação Autônoma'}
-                      {step === 8 && '8. Síntese e Fluência Final'}
-                    </span>
                   </div>
                   <div className="w-full bg-neutral-800 h-1.5 rounded-full overflow-hidden">
                     <div
@@ -209,7 +199,7 @@ export default function ExerciseRoom() {
                   </div>
                 </div>
 
-                {/* Orientações e Controles de Áudio da Etapa */}
+                {/* Orientações e Player/Botão ▶ */}
                 <div className="bg-neutral-950/60 p-2.5 rounded-xl border border-neutral-800/80">
                   {step === 1 && (
                     <div>
@@ -239,9 +229,10 @@ export default function ExerciseRoom() {
                       </div>
                       <button
                         onClick={() => speakSentence(currentSentence)}
-                        className="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
+                        className="flex items-center gap-1.5 px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
                       >
-                        Ouvir Frase 🔊
+                        <span>Ouvir Frase</span>
+                        <span className="text-[10px]">▶</span>
                       </button>
                     </div>
                   )}
@@ -256,9 +247,10 @@ export default function ExerciseRoom() {
                       </div>
                       <button
                         onClick={() => speakSentence(currentSentence)}
-                        className="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
+                        className="flex items-center gap-1.5 px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
                       >
-                        Ouvir Trecho 🔊
+                        <span>Ouvir Trecho</span>
+                        <span className="text-[10px]">▶</span>
                       </button>
                     </div>
                   )}
@@ -273,9 +265,10 @@ export default function ExerciseRoom() {
                       </div>
                       <button
                         onClick={() => speakSentence(currentSentence)}
-                        className="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
+                        className="flex items-center gap-1.5 px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
                       >
-                        Ouvir Modelo 🔊
+                        <span>Ouvir Modelo</span>
+                        <span className="text-[10px]">▶</span>
                       </button>
                     </div>
                   )}
@@ -290,9 +283,10 @@ export default function ExerciseRoom() {
                       </div>
                       <button
                         onClick={() => speakSentence(currentSentence)}
-                        className="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
+                        className="flex items-center gap-1.5 px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-blue-400 text-xs rounded-full font-medium transition"
                       >
-                        Ouvir Modelo 🔊
+                        <span>Ouvir Modelo</span>
+                        <span className="text-[10px]">▶</span>
                       </button>
                     </div>
                   )}
@@ -321,7 +315,7 @@ export default function ExerciseRoom() {
               </div>
             </div>
 
-            {/* ÁREA INFERIOR: Exercícios ocupando a largura útil com espaço ampliado */}
+            {/* ÁREA INFERIOR */}
             <div className="flex-1 flex flex-col justify-between min-h-0">
               
               {/* ETAPA 1 */}
@@ -460,7 +454,7 @@ export default function ExerciseRoom() {
                     </div>
 
                     {orderFeedback && (
-                      <p className={`text-xs font-semibold mb-2 ${orderFeedback === 'correct' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      <p className={`text-xs font-semibold mb-2 text-center ${orderFeedback === 'correct' ? 'text-emerald-400' : 'text-rose-400'}`}>
                         {orderFeedback === 'correct' ? 'Excelente! Ordem correta.' : 'Incorreto. Tente reorganizar.'}
                       </p>
                     )}
@@ -500,11 +494,11 @@ export default function ExerciseRoom() {
                     />
 
                     {typingFeedback && (
-                      <div className="mb-2">
+                      <div className="mb-2 text-center">
                         {typingFeedback === 'correct' ? (
                           <p className="text-xs font-semibold text-emerald-400">Muito bem! Frase digitada corretamente.</p>
                         ) : (
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center justify-center gap-2">
                             <span className="text-xs font-semibold text-rose-400">Diferente do esperado.</span>
                             <button
                               type="button"
