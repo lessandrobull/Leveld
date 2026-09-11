@@ -204,7 +204,7 @@ export default function ExerciseRoom() {
                   {step === 1 && (
                     <div>
                       <p className="text-xs text-neutral-300 mb-1.5">
-                        Ouça o áudio completo e identifique a ideia principal do texto (sem apoio visual):
+                        Ouça o áudio completo e identifique a ideia principal do texto:
                       </p>
                       <audio key={`${level}-1`} controls src={currentLevelData.audio} className="w-full h-8" />
                     </div>
@@ -213,7 +213,7 @@ export default function ExerciseRoom() {
                   {step === 2 && (
                     <div>
                       <p className="text-xs text-neutral-300 mb-1.5">
-                        Ouça o áudio e preencha as 3 lacunas contextuais principais:
+                        Ouça o áudio e preencha as 3 lacunas:
                       </p>
                       <audio key={`${level}-2`} controls src={currentLevelData.audio} className="w-full h-8" />
                     </div>
@@ -297,7 +297,7 @@ export default function ExerciseRoom() {
                         <span className="text-xs text-neutral-400 block">
                           Frase {sentenceIndex + 1} de {sentences.length}
                         </span>
-                        <p className="text-xs text-neutral-300">Leitura solo e autônoma em voz alta:</p>
+                        <p className="text-xs text-neutral-300">Leitura solo em voz alta:</p>
                       </div>
                       <span className="text-[11px] text-neutral-500 font-mono">Sem áudio</span>
                     </div>
@@ -306,7 +306,7 @@ export default function ExerciseRoom() {
                   {step === 8 && (
                     <div>
                       <p className="text-xs text-neutral-300 mb-1.5">
-                        Dê o play para acompanhar e realize a leitura oral contínua do texto completo:
+                        Dê o play para acompanhar a leitura e em seguida leia o texto todo em voz alta:
                       </p>
                       <audio key={`${level}-8`} controls src={currentLevelData.audio} className="w-full h-8" />
                     </div>
