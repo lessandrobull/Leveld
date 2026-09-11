@@ -28,7 +28,7 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
             ← Trocar Nível
           </Link>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-neutral-400">Nível selecionado:</span>
+            <span className="text-xs text-neutral-400">Inglês:</span>
             <span className="text-xs px-2.5 py-1 rounded bg-blue-600 font-bold text-white">
               {currentLevel}
             </span>
