@@ -17,7 +17,7 @@ export default function LevelSelector() {
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col justify-center items-center p-6 font-sans">
       <div className="max-w-md w-full text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Destrava</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Leveld</h1>
         <p className="text-sm text-neutral-400 mb-8">
           Selecione o seu nível para ver os textos disponíveis:
         </p>
