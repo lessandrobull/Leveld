@@ -150,7 +150,7 @@ export default function ExerciseRoom() {
               ← Textos
             </Link>
             <span className="text-neutral-600">|</span>
-            <h1 className="text-lg font-bold tracking-tight text-white">ReadingHub</h1>
+            <h1 className="text-lg font-bold tracking-tight text-white">Decoda</h1>
           </div>
 
           <div className="flex items-center gap-1.5">
