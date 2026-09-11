@@ -154,7 +154,7 @@ export default function ExerciseRoom() {
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-neutral-400">English:</span>
+            <span className="text-xs text-neutral-400">Inglês:</span>
             <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white">
               {level}
             </span>
