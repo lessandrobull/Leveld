@@ -20,13 +20,20 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col p-4 sm:p-6 font-sans">
       <div className="max-w-2xl mx-auto w-full flex-1 flex flex-col">
+        
+        {/* CABEÇALHO */}
         <header className="mb-6 pb-4 border-b border-neutral-800 flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-xs text-neutral-400 hover:text-white transition flex items-center gap-1"
-          >
-            ← Trocar Nível
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="text-xs text-neutral-400 hover:text-white transition flex items-center gap-1"
+            >
+              ← Trocar Nível
+            </Link>
+            <span className="text-neutral-600">|</span>
+            <h1 className="text-lg font-bold tracking-tight text-white">Leveld</h1>
+          </div>
+
           <div className="flex items-center gap-2">
             <span className="text-xs text-neutral-400">Inglês:</span>
             <span className="text-xs px-2.5 py-1 rounded bg-blue-600 font-bold text-white">
@@ -35,9 +42,10 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
           </div>
         </header>
 
+        {/* CATÁLOGO DE TEXTOS */}
         <section className="flex-1">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-400 mb-4">
-            Escolha um texto para praticar:
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-400 mb-6 text-center">
+            Escolha um texto para praticar
           </h2>
 
           <div className="grid gap-4">
@@ -71,6 +79,7 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
             ))}
           </div>
         </section>
+
       </div>
     </main>
   );
