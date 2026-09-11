@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'ReadingHub',
+  title: 'Decoda',
   description: 'Plataforma de leitura e escuta guiada de inglês.',
 };
 
