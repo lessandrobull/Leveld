@@ -23,8 +23,32 @@
         "/audio/01-coffee-culture/a1_s2.mp3",
         "/audio/01-coffee-culture/a1_s3.mp3"
       ],
+      "chunks": [
+        [
+          "People",
+          "around the world",
+          "drink coffee",
+          "every day."
+        ],
+        [
+          "Many people",
+          "start their morning",
+          "with a warm cup."
+        ],
+        [
+          "Coffee shops",
+          "are great places",
+          "to meet friends",
+          "and talk."
+        ],
+        [
+          "Drinking coffee",
+          "is a daily habit",
+          "for millions."
+        ]
+      ],
       "gistQuestion": {
-        "question": "Qual é o tema principal deste texto?",
+        "question": "What is the main topic of this text?",
         "options": [
           "How to grow coffee beans",
           "The daily habit of drinking coffee",
@@ -65,8 +89,39 @@
         "/audio/01-coffee-culture/a2_s2.mp3",
         "/audio/01-coffee-culture/a2_s3.mp3"
       ],
+      "chunks": [
+        [
+          "Coffee",
+          "is more than",
+          "just a drink;",
+          "it is",
+          "a global culture."
+        ],
+        [
+          "In Italy,",
+          "people enjoy",
+          "a quick espresso",
+          "at the counter",
+          "before work."
+        ],
+        [
+          "In Scandinavia,",
+          "people pause",
+          "their busy routine",
+          "for a coffee break",
+          "with pastries."
+        ],
+        [
+          "Today,",
+          "cafes are",
+          "modern spaces",
+          "where people",
+          "study and",
+          "work."
+        ]
+      ],
       "gistQuestion": {
-        "question": "Qual é o tema principal deste texto?",
+        "question": "What does the text show about coffee?",
         "options": [
           "Different countries have unique coffee traditions",
           "Coffee is only popular in Italy",
@@ -109,10 +164,12 @@
         [
           "The global coffee culture",
           "continues to transform",
-          "how communities interact."
+          "how communities",
+          "interact."
         ],
         [
-          "While traditional coffee rituals",
+          "While",
+          "traditional coffee rituals",
           "emphasize mindfulness,",
           "modern specialty cafes",
           "focus on",
@@ -123,7 +180,8 @@
         [
           "For millions",
           "of remote professionals,",
-          "cafes have practically replaced",
+          "cafes have",
+          "practically replaced",
           "traditional office spaces,",
           "becoming",
           "vibrant hubs",
@@ -248,27 +306,25 @@
           "Coffee’s sociological trajectory",
           "reflects",
           "broader anthropological shifts",
-          "toward",
-          "curated consumerism",
+          "toward curated consumerism",
           "and ritualized leisure."
         ],
         [
           "Far beyond",
           "a biochemical stimulant,",
-          "coffee acts as",
-          "an omnipresent catalyst",
+          "coffee acts",
+          "as an omnipresent catalyst",
           "for deliberate contemplation",
           "and civic engagement."
         ],
         [
-          "In an era dominated",
-          "by hyper-accelerated",
+          "In an era dominated by",
+          "hyper-accelerated",
           "digital connectivity,",
           "the artisanal coffee ritual",
           "offers",
           "an authentic somatic experience",
-          "anchored in",
-          "communal presence."
+          "anchored in communal presence."
         ]
       ],
       "gistQuestion": {
@@ -311,8 +367,7 @@
       ],
       "chunks": [
         [
-          "The pervasive hegemony",
-          "of coffee",
+          "The pervasive hegemony of coffee",
           "across disparate civilizations",
           "exemplifies",
           "how an indigenous",
@@ -326,8 +381,8 @@
           "solitary contemplation",
           "into shared metropolitan discourse,",
           "the contemporary cafe",
-          "remains a bastion",
-          "of democratic exchange,",
+          "remains",
+          "a bastion of democratic exchange,",
           "interrogating",
           "our relentless pursuit",
           "of productivity",
