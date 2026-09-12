@@ -50,8 +50,8 @@ export default function ExerciseRoom() {
   const [isTypingLocked, setIsTypingLocked] = useState<boolean>(false);
 
   const currentLevelData = lessonData.levels[level];
-  const sentences = currentLevelData.sentences || [];
-  const currentSentence = sentences[sentenceIndex] || '';
+  const sentences: string[] = currentLevelData.sentences || [];
+  const currentSentence: string = sentences[sentenceIndex] || '';
 
   // Calibração de Idioma das Orientações: A1/A2 (L1 - PT) | B1/B2/C1/C2 (L2 - EN)
   const isL2 = !['A1', 'A2'].includes(level);
@@ -455,12 +455,12 @@ export default function ExerciseRoom() {
                 </div>
               )}
 
-              {/* ETAPA 2 */}
+              {/* ETAPA 2 (Com tipos explícitos para o TypeScript) */}
               {step === 2 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
                     <div className="p-3.5 bg-neutral-950 rounded-xl border border-neutral-800 text-sm sm:text-base text-neutral-300 leading-relaxed mb-3 text-justify">
-                      {sentences.map((sent, sIdx) => {
+                      {sentences.map((sent: string, sIdx: number) => {
                         const gapObj = gapsData.find((g: any) => g.sentenceIndex === sIdx);
                         if (!gapObj) return <span key={sIdx}>{sent} </span>;
 
