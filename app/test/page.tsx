@@ -35,7 +35,7 @@ export default function TestPage() {
   const [selectedLevel, setSelectedLevel] = useState<LevelKey | null>(null);
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
 
-  // Estados dos exercícios no Passo 1 ao 4
+  // Estados dos exercícios
   const [gistSelected, setGistSelected] = useState<number | null>(null);
   const [gapAnswers, setGapAnswers] = useState<Record<number, string>>({});
   const [bankSlots, setBankSlots] = useState<UnitSlot[]>([]);
@@ -57,7 +57,6 @@ export default function TestPage() {
     stepCount: (s: number) => (isL2 ? `Step ${s} of 8` : `Etapa ${s} de 8`),
     sentenceCount: isL2 ? `Sentence 1 of ${sentences.length}` : `Frase 1 de ${sentences.length}`,
 
-    // Etapa 1
     step1Instruction: isL2
       ? 'Listen to the full audio and identify the main topic:'
       : 'Ouça o áudio completo e identifique a ideia principal do texto:',
@@ -66,7 +65,6 @@ export default function TestPage() {
       : 'Qual é o tema principal deste texto?',
     step1Btn: isL2 ? 'Proceed to Step 2 →' : 'Avançar para Etapa 2 →',
 
-    // Etapa 2
     step2Instruction: isL2
       ? 'Listen to the audio and fill in the 3 gaps:'
       : 'Ouça o áudio e preencha as 3 lacunas:',
@@ -74,7 +72,6 @@ export default function TestPage() {
     step2GapLabel: (i: number) => (isL2 ? `Gap ${i}` : `Lacuna ${i}`),
     step2Btn: isL2 ? 'Proceed to Step 3 →' : 'Avançar para Etapa 3 →',
 
-    // Etapa 3
     step3Instruction: isL2
       ? 'Reconstruct the sentence in the correct order:'
       : 'Reconstrua a frase na ordem correta:',
@@ -84,7 +81,6 @@ export default function TestPage() {
     step3CheckBtn: isL2 ? 'Check' : 'Checar',
     step3NextBtn: isL2 ? 'Next' : 'Avançar',
 
-    // Etapa 4
     step4Instruction: isL2 ? 'Type exactly what you hear:' : 'Digite exatamente o que ouviu:',
     step4Placeholder: isL2 ? 'Type the sentence here...' : 'Digite a frase aqui...',
     step4Correct: isL2 ? 'Well done! Correctly typed.' : 'Muito bem! Frase digitada corretamente.',
@@ -94,26 +90,21 @@ export default function TestPage() {
     step4CheckBtn: isL2 ? 'Check Typing' : 'Checar Digitação',
     step4NextBtn: isL2 ? 'Next' : 'Avançar',
 
-    // Etapa 5
     step5Instruction: isL2 ? 'Repeat the sentence aloud with text support:' : 'Repita a frase em voz alta com apoio do texto:',
     nextSentenceBtn: isL2 ? 'Next Sentence →' : 'Próxima Frase →',
 
-    // Etapa 6
     step6Instruction: isL2 ? 'Repeat orally without the text on screen:' : 'Repita oralmente sem o texto na tela:',
     step6Hidden: isL2 ? 'Text hidden in this step' : 'Texto oculto nesta etapa',
 
-    // Etapa 7
     step7Instruction: isL2 ? 'Solo reading aloud:' : 'Leitura solo em voz alta:',
     step7NoAudio: isL2 ? 'No audio' : 'Sem áudio',
 
-    // Etapa 8
     step8Instruction: isL2
       ? 'Play the audio to follow along, then read the entire text aloud:'
       : 'Dê o play para acompanhar a leitura e em seguida leia o texto todo em voz alta:',
     step8CompleteBtn: isL2 ? 'Complete and Return to Start' : 'Concluir e Voltar ao Início',
   };
 
-  // Inicialização de Chunks (Passo 3)
   useEffect(() => {
     if (selectedStep === 3 && currentSentence && levelData) {
       let units: string[] = [];
@@ -135,7 +126,6 @@ export default function TestPage() {
     }
   }, [selectedStep, currentSentence, selectedLevel]);
 
-  // Inicialização do Ditado (Passo 4)
   useEffect(() => {
     if (selectedStep === 4) {
       setTypedInput('');
@@ -161,13 +151,13 @@ export default function TestPage() {
   const gapsData = (levelData as any)?.gaps || [];
 
   // ==========================================
-  // TELA 1: ESCOLHA DO NÍVEL
+  // TELA 1: ESCOLHA DO NÍVEL (FIXO NO TOPO)
   // ==========================================
   if (!selectedLevel) {
     return (
-      <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col items-center justify-center p-4 sm:p-6 font-sans">
-        <div className="max-w-xl w-full">
-          <header className="mb-6 flex items-center justify-between border-b border-neutral-800 pb-4">
+      <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col p-4 sm:p-6 font-sans">
+        <div className="max-w-xl mx-auto w-full flex-1 flex flex-col">
+          <header className="mb-6 pb-4 border-b border-neutral-800 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <Link href="/" className="text-sm text-neutral-400 hover:text-white transition">
                 Home
@@ -207,13 +197,13 @@ export default function TestPage() {
   }
 
   // ==========================================
-  // TELA 2: ESCOLHA DO PASSO (SEM CARD NA TELA)
+  // TELA 2: ESCOLHA DO PASSO (FIXO NO TOPO, SEM TEXTO EXTRA)
   // ==========================================
   if (selectedStep === null) {
     return (
-      <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col items-center justify-center p-4 sm:p-6 font-sans">
-        <div className="max-w-xl w-full">
-          <header className="mb-6 flex items-center justify-between border-b border-neutral-800 pb-4">
+      <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col p-4 sm:p-6 font-sans">
+        <div className="max-w-xl mx-auto w-full flex-1 flex flex-col">
+          <header className="mb-6 pb-4 border-b border-neutral-800 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setSelectedLevel(null)}
@@ -237,10 +227,9 @@ export default function TestPage() {
               <button
                 key={item.step}
                 onClick={() => setSelectedStep(item.step)}
-                className="w-full p-3.5 rounded-xl border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 hover:border-neutral-700 text-left font-semibold text-sm text-neutral-200 hover:text-blue-400 transition flex items-center justify-between"
+                className="w-full p-3.5 rounded-xl border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 hover:border-neutral-700 text-left font-semibold text-sm text-neutral-200 hover:text-blue-400 transition"
               >
-                <span>{item.title}</span>
-                <span className="text-xs text-neutral-500 font-mono">Abrir Card →</span>
+                {item.title}
               </button>
             ))}
           </div>
@@ -250,13 +239,13 @@ export default function TestPage() {
   }
 
   // ==========================================
-  // TELA 3: O CARD REAL (LAYOUT IDÊNTICO AO ALUNO)
+  // TELA 3: CARD REAL (LAYOUT IDÊNTICO)
   // ==========================================
   return (
     <main className="h-screen max-h-screen bg-neutral-950 text-neutral-100 flex flex-col p-3 sm:p-5 font-sans overflow-hidden">
       <div className="max-w-2xl md:max-w-5xl mx-auto w-full flex-1 flex flex-col min-h-0">
 
-        {/* CABEÇALHO IDÊNTICO */}
+        {/* CABEÇALHO */}
         <header className="flex items-center justify-between pb-2 shrink-0">
           <div className="flex items-center gap-3">
             <button
@@ -277,14 +266,14 @@ export default function TestPage() {
           </div>
         </header>
 
-        {/* TÍTULO DA LIÇÃO */}
+        {/* TÍTULO */}
         <div className="pb-2.5 shrink-0 text-center">
           <h2 className="text-lg sm:text-xl font-semibold text-neutral-200 truncate">
             {lesson01.title}
           </h2>
         </div>
 
-        {/* CARD PRINCIPAL */}
+        {/* CARD */}
         <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 sm:p-5 shadow-sm flex-1 min-h-0 overflow-y-auto flex flex-col justify-between">
           <div className="flex-1 flex flex-col min-h-0">
 
