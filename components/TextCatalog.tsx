@@ -1,28 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import lesson01 from '../data/lessons/01-coffee-culture.json';
-import lesson02 from '../data/lessons/02-remote-work.json';
+import { lessons } from '../data/lessons';
 
 type LevelKey = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
 export default function TextCatalog({ level }: { level: LevelKey }) {
   const currentLevel = (['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].includes(level) ? level : 'A1') as LevelKey;
 
-  const lessons = [
-    {
-      id: lesson01.id,
-      title: lesson01.title,
-      image: lesson01.image,
-      summary: lesson01.levels[currentLevel]?.fullText.slice(0, 110) + '...',
-    },
-    {
-      id: lesson02.id,
-      title: lesson02.title,
-      image: lesson02.image,
-      summary: lesson02.levels[currentLevel]?.fullText.slice(0, 110) + '...',
-    },
-  ];
+  const catalogLessons = lessons.map((lesson) => ({
+    id: lesson.id,
+    title: lesson.title,
+    image: lesson.image,
+    summary: lesson.levels[currentLevel]?.fullText
+      ? lesson.levels[currentLevel].fullText.slice(0, 110) + '...'
+      : '',
+  }));
 
   return (
     <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col p-4 sm:p-6 font-sans">
@@ -56,7 +49,7 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
           </h2>
 
           <div className="grid gap-4">
-            {lessons.map((lesson) => (
+            {catalogLessons.map((lesson) => (
               <Link
                 key={lesson.id}
                 href={`/lesson/${lesson.id}?lvl=${currentLevel}`}

@@ -59,17 +59,29 @@
       "gaps": [
         {
           "target": "computers",
-          "options": ["computers", "guitars", "bicycles"],
+          "options": [
+            "computers",
+            "guitars",
+            "bicycles"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "meetings",
-          "options": ["parties", "meetings", "games"],
+          "options": [
+            "parties",
+            "meetings",
+            "games"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "cities",
-          "options": ["forests", "planets", "cities"],
+          "options": [
+            "forests",
+            "planets",
+            "cities"
+          ],
           "sentenceIndex": 3
         }
       ]
@@ -130,17 +142,29 @@
       "gaps": [
         {
           "target": "freedom",
-          "options": ["freedom", "trouble", "danger"],
+          "options": [
+            "freedom",
+            "trouble",
+            "danger"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "commute",
-          "options": ["sleep", "commute", "dance"],
+          "options": [
+            "sleep",
+            "commute",
+            "dance"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "talented",
-          "options": ["angry", "lazy", "talented"],
+          "options": [
+            "angry",
+            "lazy",
+            "talented"
+          ],
           "sentenceIndex": 3
         }
       ]
@@ -197,17 +221,29 @@
       "gaps": [
         {
           "target": "fundamentally",
-          "options": ["fundamentally", "rarely", "briefly"],
+          "options": [
+            "fundamentally",
+            "rarely",
+            "briefly"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "relocate",
-          "options": ["refuse", "relocate", "complain"],
+          "options": [
+            "refuse",
+            "relocate",
+            "complain"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "boundaries",
-          "options": ["boundaries", "excuses", "conflicts"],
+          "options": [
+            "boundaries",
+            "excuses",
+            "conflicts"
+          ],
           "sentenceIndex": 2
         }
       ]
@@ -264,17 +300,29 @@
       "gaps": [
         {
           "target": "unprecedented",
-          "options": ["unprecedented", "unimportant", "temporary"],
+          "options": [
+            "unprecedented",
+            "unimportant",
+            "temporary"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "asynchronous",
-          "options": ["passive", "asynchronous", "chaotic"],
+          "options": [
+            "passive",
+            "asynchronous",
+            "chaotic"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "accommodate",
-          "options": ["accommodate", "restrict", "discourage"],
+          "options": [
+            "accommodate",
+            "restrict",
+            "discourage"
+          ],
           "sentenceIndex": 2
         }
       ]
@@ -333,17 +381,29 @@
       "gaps": [
         {
           "target": "synchronization",
-          "options": ["synchronization", "destruction", "neglect"],
+          "options": [
+            "synchronization",
+            "destruction",
+            "neglect"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "arbitrage",
-          "options": ["arbitrage", "isolation", "penalty"],
+          "options": [
+            "arbitrage",
+            "isolation",
+            "penalty"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "decentralized",
-          "options": ["decentralized", "stagnant", "monopolized"],
+          "options": [
+            "decentralized",
+            "stagnant",
+            "monopolized"
+          ],
           "sentenceIndex": 2
         }
       ]
@@ -392,17 +452,29 @@
       "gaps": [
         {
           "target": "dichotomy",
-          "options": ["dichotomy", "harmony", "fragility"],
+          "options": [
+            "dichotomy",
+            "harmony",
+            "fragility"
+          ],
           "sentenceIndex": 0
         },
         {
           "target": "untethering",
-          "options": ["untethering", "confining", "anchoring"],
+          "options": [
+            "untethering",
+            "confining",
+            "anchoring"
+          ],
           "sentenceIndex": 1
         },
         {
           "target": "destabilizes",
-          "options": ["destabilizes", "replicates", "consolidates"],
+          "options": [
+            "destabilizes",
+            "replicates",
+            "consolidates"
+          ],
           "sentenceIndex": 1
         }
       ]

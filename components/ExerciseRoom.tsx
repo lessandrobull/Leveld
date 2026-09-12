@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useParams } from 'next/navigation';
-import lesson01 from '../data/lessons/01-coffee-culture.json';
-import lesson02 from '../data/lessons/02-remote-work.json';
+import { lessons, lessonsMap } from '../data/lessons';
 
 type LevelKey = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
@@ -13,19 +12,14 @@ interface UnitSlot {
   text: string;
 }
 
-// Mapa de Lições cadastradas no sistema
-const lessonsMap: Record<string, any> = {
-  '01-coffee-culture': lesson01,
-  '02-remote-work': lesson02,
-};
-
 export default function ExerciseRoom() {
   const params = useParams();
   const searchParams = useSearchParams();
 
-  // Identifica a lição pela URL (/lesson/[id])
-  const lessonId = (params?.id as string) || '01-coffee-culture';
-  const lessonData = lessonsMap[lessonId] || lesson01;
+  // Identifica a lição dinâmica pela URL (/lesson/[id])
+  const rawId = params?.id;
+  const lessonId = Array.isArray(rawId) ? rawId[0] : (rawId as string) || lessons[0]?.id || '01-coffee-culture';
+  const lessonData = lessonsMap[lessonId] || lessons[0];
 
   const initialLvl = (searchParams.get('lvl') as LevelKey) || 'A1';
 
@@ -455,7 +449,7 @@ export default function ExerciseRoom() {
                 </div>
               )}
 
-              {/* ETAPA 2 (Com tipos explícitos para o TypeScript) */}
+              {/* ETAPA 2 */}
               {step === 2 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
