@@ -12,36 +12,69 @@ interface UnitSlot {
   text: string;
 }
 
-// Divisor sintático inteligente para níveis intermediários e avançados (B1 a C2)
+// Divisor sintático 100% automático: garante blocos de 2 a 3 palavras com sentido
 function smartChunkSentence(sentence: string): string[] {
   const rawWords = sentence.trim().split(/\s+/);
-  if (rawWords.length <= 4) return rawWords;
+  if (rawWords.length <= 3) return rawWords;
 
-  // Marcadores de início de sintagma preposicional ou conjunção
-  const splitMarkers = new Set([
+  const markers = new Set([
     'of', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'from', 'into',
-    'through', 'about', 'over', 'and', 'but', 'or', 'while', 'as', 'evolving',
-    'leading', 'creating', 'making'
+    'through', 'about', 'over', 'under', 'between', 'without',
+    'and', 'but', 'or', 'while', 'as', 'because', 'although',
+    'which', 'that', 'who', 'where', 'when',
+    'the', 'a', 'an', 'this', 'these', 'those'
   ]);
 
   const chunks: string[] = [];
-  let currentChunk: string[] = [];
+  let current: string[] = [];
 
   for (let i = 0; i < rawWords.length; i++) {
     const word = rawWords[i];
-    const cleanWord = word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase();
+    const clean = word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase();
+    const prevWord = current[current.length - 1] || '';
+    const prevHadPunctuation = /[.,;!?]$/.test(prevWord);
+    const isGerund = clean.length > 4 && clean.endsWith('ing');
+    const isMarker = markers.has(clean);
 
-    // Se encontrar marcador e o chunk atual já tiver conteúdo substancial, divide
-    if (splitMarkers.has(cleanWord) && currentChunk.length >= 2) {
-      chunks.push(currentChunk.join(' '));
-      currentChunk = [word];
+    // Antecipação de vírgula nas próximas 1 a 3 palavras
+    const wordsUntilComma = rawWords.slice(i, i + 3).findIndex((w) => /[.,;!?]$/.test(w));
+    const commaComingSoon = wordsUntilComma !== -1 && current.length >= 1;
+
+    // Prevenção de palavra órfã no fim da frase (se restam 2 palavras e já temos 2, fecha o bloco atual)
+    const remainingWords = rawWords.length - i;
+    const balanceEnd = remainingWords === 2 && current.length >= 2;
+
+    let shouldBreak = false;
+
+    if (current.length > 0) {
+      if (prevHadPunctuation) {
+        shouldBreak = true;
+      } else if (balanceEnd) {
+        shouldBreak = true;
+      } else if ((isMarker || isGerund) && current.length >= 2) {
+        shouldBreak = true;
+      } else if (commaComingSoon && wordsUntilComma === 2 && current.length >= 1) {
+        // Isola o verbo anterior para deixar as 3 palavras seguintes até a vírgula juntas
+        shouldBreak = true;
+      } else if (current.length >= 3) {
+        shouldBreak = true;
+      }
+    }
+
+    if (shouldBreak) {
+      chunks.push(current.join(' '));
+      current = [word];
     } else {
-      currentChunk.push(word);
+      current.push(word);
     }
   }
 
-  if (currentChunk.length > 0) {
-    chunks.push(currentChunk.join(' '));
+  if (current.length > 0) {
+    if (current.length === 1 && chunks.length > 0 && chunks[chunks.length - 1].split(' ').length <= 2) {
+      chunks[chunks.length - 1] += ' ' + current.join(' ');
+    } else {
+      chunks.push(current.join(' '));
+    }
   }
 
   return chunks;
@@ -154,15 +187,12 @@ export default function ExerciseRoom() {
     ? { A1: 0.9, A2: 0.9, B1: 0.95, B2: 0.95, C1: 1.0, C2: 1.0 }
     : { A1: 0.8, A2: 0.8, B1: 0.85, B2: 0.85, C1: 0.9, C2: 0.9 };
 
-  // Inicialização da Etapa 3 com Chunks Semânticos
+  // Inicialização da Etapa 3 com Chunks Automáticos
   useEffect(() => {
     if (step === 3 && currentSentence) {
       let units: string[] = [];
-      const jsonChunks = (currentLevelData as any).chunks?.[sentenceIndex];
 
-      if (jsonChunks && Array.isArray(jsonChunks)) {
-        units = jsonChunks;
-      } else if (['B1', 'B2', 'C1', 'C2'].includes(level)) {
+      if (['B1', 'B2', 'C1', 'C2'].includes(level)) {
         units = smartChunkSentence(currentSentence);
       } else {
         units = currentSentence
@@ -186,14 +216,12 @@ export default function ExerciseRoom() {
     }
   }, [step, sentenceIndex]);
 
-  // Adicionar palavra/chunk à frase
   const handleSelectSlot = (slot: UnitSlot) => {
     if (orderFeedback === 'correct') return;
     setSelectedSlots((prev) => [...prev, slot]);
     setOrderFeedback(null);
   };
 
-  // Correção cirúrgica: remove apenas o bloco clicado na frase
   const handleRemoveSlot = (slotId: number) => {
     if (orderFeedback === 'correct') return;
     setSelectedSlots((prev) => prev.filter((s) => s.id !== slotId));
@@ -347,7 +375,6 @@ export default function ExerciseRoom() {
                     </div>
                   )}
 
-                  {/* ETAPA 3: Ordem abaixo do Player */}
                   {step === 3 && (
                     <div className="flex flex-col items-center text-center gap-1.5">
                       <p className="text-sm text-neutral-300">{t.step3Instruction}</p>
@@ -365,7 +392,6 @@ export default function ExerciseRoom() {
                     </div>
                   )}
 
-                  {/* ETAPA 4: Ordem abaixo do Player */}
                   {step === 4 && (
                     <div className="flex flex-col items-center text-center gap-1.5">
                       <p className="text-sm text-neutral-300">{t.step4Instruction}</p>
@@ -383,7 +409,6 @@ export default function ExerciseRoom() {
                     </div>
                   )}
 
-                  {/* ETAPA 5: Ordem abaixo do Player */}
                   {step === 5 && (
                     <div className="flex flex-col items-center text-center gap-1.5">
                       <p className="text-sm text-neutral-300">{t.step5Instruction}</p>
@@ -401,7 +426,6 @@ export default function ExerciseRoom() {
                     </div>
                   )}
 
-                  {/* ETAPA 6: Ordem abaixo do Player */}
                   {step === 6 && (
                     <div className="flex flex-col items-center text-center gap-1.5">
                       <p className="text-sm text-neutral-300">{t.step6Instruction}</p>
@@ -485,7 +509,7 @@ export default function ExerciseRoom() {
                 </div>
               )}
 
-              {/* ETAPA 2 (Kindle Style Justified) */}
+              {/* ETAPA 2 */}
               {step === 2 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
@@ -557,11 +581,10 @@ export default function ExerciseRoom() {
                 </div>
               )}
 
-              {/* ETAPA 3 (Módulo Fixo + Correção Cirúrgica) */}
+              {/* ETAPA 3 (Módulo Fixo + Chunks Otimizados) */}
               {step === 3 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    {/* Área da Frase em Construção */}
                     <div className="min-h-14 p-3 bg-neutral-950 border border-dashed border-neutral-700 rounded-xl flex flex-wrap gap-2 items-center justify-center mb-3">
                       {selectedSlots.length === 0 ? (
                         <span className="text-sm text-neutral-500">{t.step3Prompt}</span>
@@ -579,7 +602,6 @@ export default function ExerciseRoom() {
                       )}
                     </div>
 
-                    {/* Banco Fixo de Palavras (Sem Efeito Dominó) */}
                     <div className="flex flex-wrap gap-2 mb-3 justify-center">
                       {bankSlots.map((slot) => {
                         const isSelected = selectedSlots.some((s) => s.id === slot.id);
@@ -729,7 +751,7 @@ export default function ExerciseRoom() {
                 </div>
               )}
 
-              {/* ETAPA 8 (Kindle Style Justified) */}
+              {/* ETAPA 8 */}
               {step === 8 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-200 leading-relaxed text-sm sm:text-base mb-3 text-justify">
