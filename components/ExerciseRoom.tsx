@@ -7,6 +7,46 @@ import lessonData from '../data/lessons/01-coffee-culture.json';
 
 type LevelKey = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
+interface UnitSlot {
+  id: number;
+  text: string;
+}
+
+// Divisor sintático inteligente para níveis intermediários e avançados (B1 a C2)
+function smartChunkSentence(sentence: string): string[] {
+  const rawWords = sentence.trim().split(/\s+/);
+  if (rawWords.length <= 4) return rawWords;
+
+  // Marcadores de início de sintagma preposicional ou conjunção
+  const splitMarkers = new Set([
+    'of', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'from', 'into',
+    'through', 'about', 'over', 'and', 'but', 'or', 'while', 'as', 'evolving',
+    'leading', 'creating', 'making'
+  ]);
+
+  const chunks: string[] = [];
+  let currentChunk: string[] = [];
+
+  for (let i = 0; i < rawWords.length; i++) {
+    const word = rawWords[i];
+    const cleanWord = word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase();
+
+    // Se encontrar marcador e o chunk atual já tiver conteúdo substancial, divide
+    if (splitMarkers.has(cleanWord) && currentChunk.length >= 2) {
+      chunks.push(currentChunk.join(' '));
+      currentChunk = [word];
+    } else {
+      currentChunk.push(word);
+    }
+  }
+
+  if (currentChunk.length > 0) {
+    chunks.push(currentChunk.join(' '));
+  }
+
+  return chunks;
+}
+
 export default function ExerciseRoom() {
   const searchParams = useSearchParams();
   const initialLvl = (searchParams.get('lvl') as LevelKey) || 'A1';
@@ -21,9 +61,9 @@ export default function ExerciseRoom() {
   // Estados da Etapa 2 (Gaps)
   const [gapAnswers, setGapAnswers] = useState<Record<number, string>>({});
 
-  // Estados da Etapa 3 (Sintaxe)
-  const [availableUnits, setAvailableUnits] = useState<string[]>([]);
-  const [selectedUnits, setSelectedUnits] = useState<string[]>([]);
+  // Estados da Etapa 3 (Sintaxe com Slots Fixos)
+  const [bankSlots, setBankSlots] = useState<UnitSlot[]>([]);
+  const [selectedSlots, setSelectedSlots] = useState<UnitSlot[]>([]);
   const [orderFeedback, setOrderFeedback] = useState<'correct' | 'wrong' | null>(null);
 
   // Estados da Etapa 4 (Ditado)
@@ -70,7 +110,7 @@ export default function ExerciseRoom() {
       ? 'Tap the blocks below to order the sentence...'
       : 'Toque nos blocos abaixo para ordenar a frase...',
     step3Correct: isL2 ? 'Great! Correct order.' : 'Excelente! Ordem correta.',
-    step3Wrong: isL2 ? 'Incorrect. Try reordering.' : 'Incorreto. Tente reorganizar.',
+    step3Wrong: isL2 ? 'Incorrect. Tap a block to adjust.' : 'Incorreto. Toque em um bloco para ajustar.',
     step3CheckBtn: isL2 ? 'Check' : 'Checar',
     step3NextBtn: isL2 ? 'Next' : 'Avançar',
 
@@ -114,24 +154,26 @@ export default function ExerciseRoom() {
     ? { A1: 0.9, A2: 0.9, B1: 0.95, B2: 0.95, C1: 1.0, C2: 1.0 }
     : { A1: 0.8, A2: 0.8, B1: 0.85, B2: 0.85, C1: 0.9, C2: 0.9 };
 
+  // Inicialização da Etapa 3 com Chunks Semânticos
   useEffect(() => {
     if (step === 3 && currentSentence) {
-      const cleanWords = currentSentence
-        .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
-        .split(' ')
-        .filter(Boolean);
-
       let units: string[] = [];
-      if (['B2', 'C1', 'C2'].includes(level)) {
-        for (let i = 0; i < cleanWords.length; i += 2) {
-          units.push(cleanWords.slice(i, i + 2).join(' '));
-        }
+      const jsonChunks = (currentLevelData as any).chunks?.[sentenceIndex];
+
+      if (jsonChunks && Array.isArray(jsonChunks)) {
+        units = jsonChunks;
+      } else if (['B1', 'B2', 'C1', 'C2'].includes(level)) {
+        units = smartChunkSentence(currentSentence);
       } else {
-        units = [...cleanWords];
+        units = currentSentence
+          .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
+          .split(' ')
+          .filter(Boolean);
       }
 
-      setAvailableUnits([...units].sort(() => Math.random() - 0.5));
-      setSelectedUnits([]);
+      const slots: UnitSlot[] = units.map((text, idx) => ({ id: idx, text }));
+      setBankSlots([...slots].sort(() => Math.random() - 0.5));
+      setSelectedSlots([]);
       setOrderFeedback(null);
     }
   }, [step, sentenceIndex, currentSentence, level]);
@@ -144,26 +186,35 @@ export default function ExerciseRoom() {
     }
   }, [step, sentenceIndex]);
 
-  const handleUnitClick = (unit: string, fromAvailable: boolean) => {
+  // Adicionar palavra/chunk à frase
+  const handleSelectSlot = (slot: UnitSlot) => {
     if (orderFeedback === 'correct') return;
-    if (fromAvailable) {
-      const idx = availableUnits.indexOf(unit);
-      const updated = [...availableUnits];
-      updated.splice(idx, 1);
-      setAvailableUnits(updated);
-      setSelectedUnits([...selectedUnits, unit]);
-    } else {
-      const idx = selectedUnits.indexOf(unit);
-      const updated = [...selectedUnits];
-      updated.splice(idx, 1);
-      setSelectedUnits(updated);
-      setAvailableUnits([...availableUnits, unit]);
-    }
+    setSelectedSlots((prev) => [...prev, slot]);
+    setOrderFeedback(null);
+  };
+
+  // Correção cirúrgica: remove apenas o bloco clicado na frase
+  const handleRemoveSlot = (slotId: number) => {
+    if (orderFeedback === 'correct') return;
+    setSelectedSlots((prev) => prev.filter((s) => s.id !== slotId));
+    setOrderFeedback(null);
   };
 
   const checkOrder = () => {
-    const rawTarget = currentSentence.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').trim().toLowerCase();
-    const constructed = selectedUnits.join(' ').trim().toLowerCase();
+    const rawTarget = currentSentence
+      .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, ' ');
+
+    const constructed = selectedSlots
+      .map((s) => s.text)
+      .join(' ')
+      .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, ' ');
+
     if (rawTarget === constructed) {
       setOrderFeedback('correct');
     } else {
@@ -265,8 +316,9 @@ export default function ExerciseRoom() {
                   </div>
                 </div>
 
-                {/* Orientações e Player (Textos Centralizados) */}
+                {/* Orientações e Player */}
                 <div className="bg-neutral-950/60 p-3 rounded-xl border border-neutral-800/80">
+                  
                   {step === 1 && (
                     <div className="text-center">
                       <p className="text-sm text-neutral-300 mb-2">{t.step1Instruction}</p>
@@ -295,14 +347,10 @@ export default function ExerciseRoom() {
                     </div>
                   )}
 
+                  {/* ETAPA 3: Ordem abaixo do Player */}
                   {step === 3 && (
-                    <div className="flex flex-col items-center gap-2 text-center">
-                      <div>
-                        <span className="text-sm text-neutral-400 block mb-0.5">
-                          {t.sentenceCount(sentenceIndex + 1, sentences.length)}
-                        </span>
-                        <p className="text-sm text-neutral-300">{t.step3Instruction}</p>
-                      </div>
+                    <div className="flex flex-col items-center text-center gap-1.5">
+                      <p className="text-sm text-neutral-300">{t.step3Instruction}</p>
                       <audio
                         key={`step3-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
@@ -311,17 +359,16 @@ export default function ExerciseRoom() {
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
                         className="w-full max-w-md h-8 shrink-0"
                       />
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">
+                        {t.sentenceCount(sentenceIndex + 1, sentences.length)}
+                      </span>
                     </div>
                   )}
 
+                  {/* ETAPA 4: Ordem abaixo do Player */}
                   {step === 4 && (
-                    <div className="flex flex-col items-center gap-2 text-center">
-                      <div>
-                        <span className="text-sm text-neutral-400 block mb-0.5">
-                          {t.sentenceCount(sentenceIndex + 1, sentences.length)}
-                        </span>
-                        <p className="text-sm text-neutral-300">{t.step4Instruction}</p>
-                      </div>
+                    <div className="flex flex-col items-center text-center gap-1.5">
+                      <p className="text-sm text-neutral-300">{t.step4Instruction}</p>
                       <audio
                         key={`step4-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
@@ -330,17 +377,16 @@ export default function ExerciseRoom() {
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
                         className="w-full max-w-md h-8 shrink-0"
                       />
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">
+                        {t.sentenceCount(sentenceIndex + 1, sentences.length)}
+                      </span>
                     </div>
                   )}
 
+                  {/* ETAPA 5: Ordem abaixo do Player */}
                   {step === 5 && (
-                    <div className="flex flex-col items-center gap-2 text-center">
-                      <div>
-                        <span className="text-sm text-neutral-400 block mb-0.5">
-                          {t.sentenceCount(sentenceIndex + 1, sentences.length)}
-                        </span>
-                        <p className="text-sm text-neutral-300">{t.step5Instruction}</p>
-                      </div>
+                    <div className="flex flex-col items-center text-center gap-1.5">
+                      <p className="text-sm text-neutral-300">{t.step5Instruction}</p>
                       <audio
                         key={`step5-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
@@ -349,17 +395,16 @@ export default function ExerciseRoom() {
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
                         className="w-full max-w-md h-8 shrink-0"
                       />
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">
+                        {t.sentenceCount(sentenceIndex + 1, sentences.length)}
+                      </span>
                     </div>
                   )}
 
+                  {/* ETAPA 6: Ordem abaixo do Player */}
                   {step === 6 && (
-                    <div className="flex flex-col items-center gap-2 text-center">
-                      <div>
-                        <span className="text-sm text-neutral-400 block mb-0.5">
-                          {t.sentenceCount(sentenceIndex + 1, sentences.length)}
-                        </span>
-                        <p className="text-sm text-neutral-300">{t.step6Instruction}</p>
-                      </div>
+                    <div className="flex flex-col items-center text-center gap-1.5">
+                      <p className="text-sm text-neutral-300">{t.step6Instruction}</p>
                       <audio
                         key={`step6-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
@@ -368,15 +413,18 @@ export default function ExerciseRoom() {
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
                         className="w-full max-w-md h-8 shrink-0"
                       />
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">
+                        {t.sentenceCount(sentenceIndex + 1, sentences.length)}
+                      </span>
                     </div>
                   )}
 
                   {step === 7 && (
                     <div className="flex flex-col items-center text-center gap-1">
-                      <span className="text-sm text-neutral-400 block">
+                      <p className="text-sm text-neutral-300">{t.step7Instruction}</p>
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">
                         {t.sentenceCount(sentenceIndex + 1, sentences.length)}
                       </span>
-                      <p className="text-sm text-neutral-300">{t.step7Instruction}</p>
                       <span className="text-xs text-neutral-500 font-mono mt-0.5">{t.step7NoAudio}</span>
                     </div>
                   )}
@@ -394,6 +442,7 @@ export default function ExerciseRoom() {
                       />
                     </div>
                   )}
+
                 </div>
               </div>
             </div>
@@ -508,36 +557,47 @@ export default function ExerciseRoom() {
                 </div>
               )}
 
-              {/* ETAPA 3 */}
+              {/* ETAPA 3 (Módulo Fixo + Correção Cirúrgica) */}
               {step === 3 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    <div className="min-h-12 p-3 bg-neutral-950 border border-dashed border-neutral-700 rounded-xl flex flex-wrap gap-2 items-center mb-3">
-                      {selectedUnits.length === 0 ? (
+                    {/* Área da Frase em Construção */}
+                    <div className="min-h-14 p-3 bg-neutral-950 border border-dashed border-neutral-700 rounded-xl flex flex-wrap gap-2 items-center justify-center mb-3">
+                      {selectedSlots.length === 0 ? (
                         <span className="text-sm text-neutral-500">{t.step3Prompt}</span>
                       ) : (
-                        selectedUnits.map((unit, i) => (
+                        selectedSlots.map((slot) => (
                           <button
-                            key={i}
-                            onClick={() => handleUnitClick(unit, false)}
-                            className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-500 transition"
+                            key={slot.id}
+                            onClick={() => handleRemoveSlot(slot.id)}
+                            className="px-3 py-1.5 bg-blue-600 border border-blue-500 text-white text-sm font-medium rounded-lg hover:bg-rose-600 hover:border-rose-500 transition shadow-sm"
+                            title="Clique para devolver este bloco"
                           >
-                            {unit}
+                            {slot.text}
                           </button>
                         ))
                       )}
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {availableUnits.map((unit, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleUnitClick(unit, true)}
-                          className="px-3 py-1.5 bg-neutral-800 text-neutral-300 text-sm rounded-lg hover:bg-neutral-700 transition"
-                        >
-                          {unit}
-                        </button>
-                      ))}
+                    {/* Banco Fixo de Palavras (Sem Efeito Dominó) */}
+                    <div className="flex flex-wrap gap-2 mb-3 justify-center">
+                      {bankSlots.map((slot) => {
+                        const isSelected = selectedSlots.some((s) => s.id === slot.id);
+                        return (
+                          <button
+                            key={slot.id}
+                            disabled={isSelected}
+                            onClick={() => handleSelectSlot(slot)}
+                            className={`px-3 py-1.5 text-sm font-medium rounded-lg border transition ${
+                              isSelected
+                                ? 'border-dashed border-neutral-800/80 bg-neutral-950/40 text-transparent select-none pointer-events-none cursor-default'
+                                : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:bg-neutral-700 hover:border-neutral-600'
+                            }`}
+                          >
+                            {slot.text}
+                          </button>
+                        );
+                      })}
                     </div>
 
                     {orderFeedback && (
