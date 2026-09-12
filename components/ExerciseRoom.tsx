@@ -188,25 +188,26 @@ export default function ExerciseRoom() {
     : { A1: 0.8, A2: 0.8, B1: 0.85, B2: 0.85, C1: 0.9, C2: 0.9 };
 
   // Inicialização da Etapa 3 com Chunks Automáticos
-  useEffect(() => {
-    if (step === 3 && currentSentence) {
-      let units: string[] = [];
+ useEffect(() => {
+  if (step === 3 && currentSentence) {
+    let units: string[] = [];
+    const jsonChunks = (currentLevelData as any).chunks?.[sentenceIndex];
 
-      if (['B1', 'B2', 'C1', 'C2'].includes(level)) {
-        units = smartChunkSentence(currentSentence);
-      } else {
-        units = currentSentence
-          .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
-          .split(' ')
-          .filter(Boolean);
-      }
-
-      const slots: UnitSlot[] = units.map((text, idx) => ({ id: idx, text }));
-      setBankSlots([...slots].sort(() => Math.random() - 0.5));
-      setSelectedSlots([]);
-      setOrderFeedback(null);
+    if (jsonChunks && Array.isArray(jsonChunks)) {
+      units = jsonChunks;
+    } else {
+      units = currentSentence
+        .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
+        .split(' ')
+        .filter(Boolean);
     }
-  }, [step, sentenceIndex, currentSentence, level]);
+
+    const slots: UnitSlot[] = units.map((text, idx) => ({ id: idx, text }));
+    setBankSlots([...slots].sort(() => Math.random() - 0.5));
+    setSelectedSlots([]);
+    setOrderFeedback(null);
+  }
+}, [step, sentenceIndex, currentSentence, level]);
 
   useEffect(() => {
     if (step === 4) {
