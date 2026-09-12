@@ -1,250 +1,175 @@
 {
   "id": "01-coffee-culture",
-  "title": "Coffee Culture",
-  "image": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
-  "voice": "Andrew",
+  "title": "Coffee Culture Around the World",
+  "image": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?q=80&w=1000&auto=format&fit=crop",
+  "voice": "Ava",
+  "sponsor": {
+    "text": "Pratique conversação diária com nativos na Cambly.",
+    "link": "https://www.cambly.com"
+  },
   "levels": {
     "A1": {
-      "fullText": "Many people drink coffee every morning. They like hot coffee with milk and sugar. Coffee shops are friendly places to meet friends.",
+      "fullText": "People around the world drink coffee every day. Many people start their morning with a warm cup. Coffee shops are great places to meet friends and talk. Drinking coffee is a daily habit for millions.",
       "sentences": [
-        "Many people drink coffee every morning.",
-        "They like hot coffee with milk and sugar.",
-        "Coffee shops are friendly places to meet friends."
+        "People around the world drink coffee every day.",
+        "Many people start their morning with a warm cup.",
+        "Coffee shops are great places to meet friends and talk.",
+        "Drinking coffee is a daily habit for millions."
       ],
-      "audio": "/audio/coffee-culture/a1-full.mp3",
+      "audio": "/audio/01-coffee-culture/a1.mp3",
       "sentenceAudios": [
-        "/audio/coffee-culture/a1-s1.mp3",
-        "/audio/coffee-culture/a1-s2.mp3",
-        "/audio/coffee-culture/a1-s3.mp3"
+        "/audio/01-coffee-culture/a1_s0.mp3",
+        "/audio/01-coffee-culture/a1_s1.mp3",
+        "/audio/01-coffee-culture/a1_s2.mp3",
+        "/audio/01-coffee-culture/a1_s3.mp3"
       ],
       "gistQuestion": {
         "question": "Qual é o tema principal deste texto?",
         "options": [
-          "Como as pessoas tomam e gostam de café",
-          "A história da plantação de café no Brasil",
-          "Por que o café faz mal para a saúde"
+          "How to grow coffee beans",
+          "The daily habit of drinking coffee",
+          "The best dessert in coffee shops"
         ],
-        "correct": 0
+        "correct": 1
       },
       "gaps": [
-        { "sentenceIndex": 0, "target": "drink", "options": ["drink", "eat", "cook"] },
-        { "sentenceIndex": 1, "target": "milk", "options": ["milk", "salt", "bread"] },
-        { "sentenceIndex": 2, "target": "places", "options": ["places", "cars", "offices"] }
+        {
+          "target": "coffee",
+          "options": ["tea", "coffee", "juice"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "morning",
+          "options": ["night", "morning", "winter"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "habit",
+          "options": ["habit", "problem", "secret"],
+          "sentenceIndex": 3
+        }
       ]
     },
     "A2": {
-      "fullText": "Coffee is one of the most popular drinks in the world. People often visit local cafes to work or talk with friends. Baristas prepare different drinks like espresso, cappuccino, and latte.",
+      "fullText": "Coffee is more than just a drink; it is a global culture. In Italy, people enjoy a quick espresso at the counter before work. In Scandinavia, people pause their busy routine for a coffee break with pastries. Today, cafes are modern spaces where people study and work.",
       "sentences": [
-        "Coffee is one of the most popular drinks in the world.",
-        "People often visit local cafes to work or talk with friends.",
-        "Baristas prepare different drinks like espresso, cappuccino, and latte."
+        "Coffee is more than just a drink; it is a global culture.",
+        "In Italy, people enjoy a quick espresso at the counter before work.",
+        "In Scandinavia, people pause their busy routine for a coffee break with pastries.",
+        "Today, cafes are modern spaces where people study and work."
       ],
-      "audio": "/audio/coffee-culture/a2-full.mp3",
+      "audio": "/audio/01-coffee-culture/a2.mp3",
       "sentenceAudios": [
-        "/audio/coffee-culture/a2-s1.mp3",
-        "/audio/coffee-culture/a2-s2.mp3",
-        "/audio/coffee-culture/a2-s3.mp3"
+        "/audio/01-coffee-culture/a2_s0.mp3",
+        "/audio/01-coffee-culture/a2_s1.mp3",
+        "/audio/01-coffee-culture/a2_s2.mp3",
+        "/audio/01-coffee-culture/a2_s3.mp3"
       ],
       "gistQuestion": {
         "question": "Qual é o tema principal deste texto?",
         "options": [
-          "A popularidade do café e o papel das cafeterias",
-          "As máquinas industriais usadas para moer grãos",
-          "O preço das bebidas nas grandes cidades"
+          "Different countries have unique coffee traditions",
+          "Coffee is only popular in Italy",
+          "Making espresso is very difficult"
         ],
         "correct": 0
       },
       "gaps": [
-        { "sentenceIndex": 0, "target": "popular", "options": ["popular", "dangerous", "cheap"] },
-        { "sentenceIndex": 1, "target": "visit", "options": ["visit", "clean", "build"] },
-        { "sentenceIndex": 2, "target": "prepare", "options": ["prepare", "forget", "destroy"] }
+        {
+          "target": "culture",
+          "options": ["culture", "recipe", "sport"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "routine",
+          "options": ["routine", "journey", "kitchen"],
+          "sentenceIndex": 2
+        },
+        {
+          "target": "study",
+          "options": ["sleep", "fight", "study"],
+          "sentenceIndex": 3
+        }
       ]
     },
     "B1": {
-      "fullText": "Coffee culture has changed significantly over the past few decades. Instead of just drinking instant coffee, people now appreciate high quality beans. Cafes have become comfortable spaces where people can spend hours working on their laptops.",
+      "fullText": "The global coffee culture continues to transform how communities interact. While traditional coffee rituals emphasize mindfulness, modern specialty cafes focus on sustainable beans and precise brewing techniques. For millions of remote professionals, cafes have practically replaced traditional office spaces, becoming vibrant hubs of productivity and conversation.",
       "sentences": [
-        "Coffee culture has changed significantly over the past few decades.",
-        "Instead of just drinking instant coffee, people now appreciate high quality beans.",
-        "Cafes have become comfortable spaces where people can spend hours working on their laptops."
+        "The global coffee culture continues to transform how communities interact.",
+        "While traditional coffee rituals emphasize mindfulness, modern specialty cafes focus on sustainable beans and precise brewing techniques.",
+        "For millions of remote professionals, cafes have practically replaced traditional office spaces, becoming vibrant hubs of productivity and conversation."
       ],
-      "audio": "/audio/coffee-culture/b1-full.mp3",
+      "audio": "/audio/01-coffee-culture/b1.mp3",
       "sentenceAudios": [
-        "/audio/coffee-culture/b1-s1.mp3",
-        "/audio/coffee-culture/b1-s2.mp3",
-        "/audio/coffee-culture/b1-s3.mp3"
+        "/audio/01-coffee-culture/b1_s0.mp3",
+        "/audio/01-coffee-culture/b1_s1.mp3",
+        "/audio/01-coffee-culture/b1_s2.mp3"
       ],
       "chunks": [
         [
-          "Coffee culture",
-          "has changed",
-          "significantly",
-          "over the past",
-          "few decades."
+          "The global coffee culture",
+          "continues to transform",
+          "how communities interact."
         ],
         [
-          "Instead of",
-          "just drinking",
-          "instant coffee,",
-          "people now",
-          "appreciate",
-          "high quality beans."
+          "While traditional coffee rituals",
+          "emphasize mindfulness,",
+          "modern specialty cafes",
+          "focus on",
+          "sustainable beans",
+          "and precise",
+          "brewing techniques."
         ],
         [
-          "Cafes",
-          "have become",
-          "comfortable spaces",
-          "where",
-          "people",
-          "can spend",
-          "hours",
-          "working",
-          "on their laptops."
+          "For millions",
+          "of remote professionals,",
+          "cafes have practically replaced",
+          "traditional office spaces,",
+          "becoming",
+          "vibrant hubs",
+          "of productivity",
+          "and conversation."
         ]
       ],
       "gistQuestion": {
-        "question": "What is the main topic of this text?",
+        "question": "According to the passage, how have modern cafes evolved?",
         "options": [
-          "The evolution of coffee appreciation and modern cafes",
-          "The chemical components of caffeine molecules",
-          "Why instant coffee is superior to brewed coffee"
+          "They now only serve traditional tea",
+          "They have become social and productive work environments",
+          "They strictly forbid remote work"
         ],
-        "correct": 0
+        "correct": 1
       },
       "gaps": [
-        { "sentenceIndex": 0, "target": "significantly", "options": ["significantly", "rarely", "slowly"] },
-        { "sentenceIndex": 1, "target": "appreciate", "options": ["appreciate", "reject", "ignore"] },
-        { "sentenceIndex": 2, "target": "comfortable", "options": ["comfortable", "noisy", "crowded"] }
+        {
+          "target": "transform",
+          "options": ["ignore", "transform", "destroy"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "sustainable",
+          "options": ["synthetic", "sustainable", "dangerous"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "productivity",
+          "options": ["productivity", "silence", "competition"],
+          "sentenceIndex": 2
+        }
       ]
     },
     "B2": {
-      "fullText": "The modern coffee scene focuses heavily on craftsmanship, bean origin, and specialized brewing methods. Specialty coffee shops prioritize direct trade with farmers, highlighting the unique flavor profile of each region. As remote work continues to expand, neighborhood cafes have evolved into essential hubs for daily productivity and networking.",
-      "sentences": [
-        "The modern coffee scene focuses heavily on craftsmanship, bean origin, and specialized brewing methods.",
-        "Specialty coffee shops prioritize direct trade with farmers, highlighting the unique flavor profile of each region.",
-        "As remote work continues to expand, neighborhood cafes have evolved into essential hubs for daily productivity and networking."
-      ],
-      "audio": "/audio/coffee-culture/b2-full.mp3",
-      "sentenceAudios": [
-        "/audio/coffee-culture/b2-s1.mp3",
-        "/audio/coffee-culture/b2-s2.mp3",
-        "/audio/coffee-culture/b2-s3.mp3"
-      ],
-      "chunks": [
-        [
-          "The modern coffee scene",
-          "focuses heavily",
-          "on craftsmanship,",
-          "bean origin,",
-          "and specialized",
-          "brewing methods."
-        ],
-        [
-          "Specialty coffee shops",
-          "prioritize",
-          "direct trade",
-          "with farmers,",
-          "highlighting",
-          "the unique flavor profile",
-          "of each region."
-        ],
-        [
-          "As remote work",
-          "continues",
-          "to expand,",
-          "neighborhood cafes",
-          "have evolved into",
-          "essential hubs",
-          "for daily productivity",
-          "and networking."
-        ]
-      ],
-      "gistQuestion": {
-        "question": "What is the primary focus of the text?",
-        "options": [
-          "Craftsmanship, ethical sourcing, and the social function of modern cafes",
-          "Financial profits of multinational coffee chains",
-          "How climate change is reducing coffee harvest volumes"
-        ],
-        "correct": 0
-      },
-      "gaps": [
-        { "sentenceIndex": 0, "target": "craftsmanship", "options": ["craftsmanship", "indifference", "machinery"] },
-        { "sentenceIndex": 1, "target": "prioritize", "options": ["prioritize", "discourage", "overlook"] },
-        { "sentenceIndex": 2, "target": "essential", "options": ["essential", "secondary", "obsolete"] }
-      ]
-    },
-    "C1": {
-      "fullText": "The global fascination with artisanal coffee reflects a significant cultural shift toward conscious consumerism and sensory appreciation. Connoisseurs meticulously examine subtle variables such as roast profiles, soil elevation, and extraction ratios to achieve optimal flavor. These curated establishments foster vibrant micro-communities, seamlessly merging commercial transactions with collaborative social spaces.",
-      "sentences": [
-        "The global fascination with artisanal coffee reflects a significant cultural shift toward conscious consumerism and sensory appreciation.",
-        "Connoisseurs meticulously examine subtle variables such as roast profiles, soil elevation, and extraction ratios to achieve optimal flavor.",
-        "These curated establishments foster vibrant micro-communities, seamlessly merging commercial transactions with collaborative social spaces."
-      ],
-      "audio": "/audio/coffee-culture/c1-full.mp3",
-      "sentenceAudios": [
-        "/audio/coffee-culture/c1-s1.mp3",
-        "/audio/coffee-culture/c1-s2.mp3",
-        "/audio/coffee-culture/c1-s3.mp3"
-      ],
-      "chunks": [
-        [
-          "The global fascination",
-          "with artisanal coffee",
-          "reflects",
-          "a significant",
-          "cultural shift",
-          "toward",
-          "conscious consumerism",
-          "and sensory appreciation."
-        ],
-        [
-          "Connoisseurs",
-          "meticulously examine",
-          "subtle variables",
-          "such as",
-          "roast profiles,",
-          "soil elevation,",
-          "and extraction ratios",
-          "to achieve",
-          "optimal flavor."
-        ],
-        [
-          "These curated establishments",
-          "foster",
-          "vibrant micro-communities,",
-          "seamlessly merging",
-          "commercial transactions",
-          "with collaborative",
-          "social spaces."
-        ]
-      ],
-      "gistQuestion": {
-        "question": "Which statement best summarizes the central thesis of the text?",
-        "options": [
-          "Artisanal coffee represents conscious consumerism and sensory refinement",
-          "Extracting coffee requires high temperatures and minimal human intervention",
-          "Commercial transactions are replacing social interactions in urban areas"
-        ],
-        "correct": 0
-      },
-      "gaps": [
-        { "sentenceIndex": 0, "target": "fascination", "options": ["fascination", "disregard", "hesitation"] },
-        { "sentenceIndex": 1, "target": "meticulously", "options": ["meticulously", "haphazardly", "rarely"] },
-        { "sentenceIndex": 2, "target": "seamlessly", "options": ["seamlessly", "awkwardly", "narrowly"] }
-      ]
-    },
-    "C2": {
-      "fullText": "The contemporary resurgence of coffee culture transcends simple caffeine consumption, evolving into a sophisticated sensory experience. Concurrently, the third-wave coffee movement has redefined urban socialization, transforming ordinary neighborhood venues into intellectual sanctuaries for creators and digital nomads. Ultimately, this ritualistic pursuit of gastronomic precision exemplifies how mundane daily routines can be elevated into deliberate art forms.",
+      "fullText": "The contemporary resurgence of coffee culture transcends simple caffeine consumption, evolving into a sophisticated sensory experience. Artisanal roasters prioritize fair-trade sourcing and intricate brewing parameters, highlighting regional flavor notes. Concurrently, the third-wave coffee movement has redefined urban socialization, transforming ordinary neighborhood venues into intellectual sanctuaries for creators and digital nomads.",
       "sentences": [
         "The contemporary resurgence of coffee culture transcends simple caffeine consumption, evolving into a sophisticated sensory experience.",
-        "Concurrently, the third-wave coffee movement has redefined urban socialization, transforming ordinary neighborhood venues into intellectual sanctuaries for creators and digital nomads.",
-        "Ultimately, this ritualistic pursuit of gastronomic precision exemplifies how mundane daily routines can be elevated into deliberate art forms."
+        "Artisanal roasters prioritize fair-trade sourcing and intricate brewing parameters, highlighting regional flavor notes.",
+        "Concurrently, the third-wave coffee movement has redefined urban socialization, transforming ordinary neighborhood venues into intellectual sanctuaries for creators and digital nomads."
       ],
-      "audio": "/audio/coffee-culture/c2-full.mp3",
+      "audio": "/audio/01-coffee-culture/b2.mp3",
       "sentenceAudios": [
-        "/audio/coffee-culture/c2-s1.mp3",
-        "/audio/coffee-culture/c2-s2.mp3",
-        "/audio/coffee-culture/c2-s3.mp3"
+        "/audio/01-coffee-culture/b2_s0.mp3",
+        "/audio/01-coffee-culture/b2_s1.mp3",
+        "/audio/01-coffee-culture/b2_s2.mp3"
       ],
       "chunks": [
         [
@@ -257,6 +182,15 @@
           "sensory experience."
         ],
         [
+          "Artisanal roasters",
+          "prioritize",
+          "fair-trade sourcing",
+          "and intricate",
+          "brewing parameters,",
+          "highlighting",
+          "regional flavor notes."
+        ],
+        [
           "Concurrently,",
           "the third-wave",
           "coffee movement",
@@ -267,32 +201,165 @@
           "into intellectual sanctuaries",
           "for creators",
           "and digital nomads."
-        ],
-        [
-          "Ultimately,",
-          "this ritualistic pursuit",
-          "of gastronomic precision",
-          "exemplifies",
-          "how mundane",
-          "daily routines",
-          "can be elevated",
-          "into deliberate",
-          "art forms."
         ]
       ],
       "gistQuestion": {
-        "question": "What is the author's primary philosophical argument?",
+        "question": "What is the primary focus of the third-wave coffee movement mentioned?",
         "options": [
-          "Coffee culture elevates mundane daily habits into deliberate, communal art",
-          "Digital nomadism is causing the decline of traditional cafe culture",
-          "Gastronomic precision is an unattainable goal in modern gastronomy"
+          "Fast delivery of commercial powdered coffee",
+          "Sophisticated artisanal sourcing and transforming social spaces",
+          "Eliminating seating in urban coffee bars"
+        ],
+        "correct": 1
+      },
+      "gaps": [
+        {
+          "target": "sensory",
+          "options": ["sensory", "hostile", "mechanical"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "fair-trade",
+          "options": ["fair-trade", "careless", "automated"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "sanctuaries",
+          "options": ["factories", "sanctuaries", "warehouses"],
+          "sentenceIndex": 2
+        }
+      ]
+    },
+    "C1": {
+      "fullText": "Coffee’s sociological trajectory reflects broader anthropological shifts toward curated consumerism and ritualized leisure. Far beyond a biochemical stimulant, coffee acts as an omnipresent catalyst for deliberate contemplation and civic engagement. In an era dominated by hyper-accelerated digital connectivity, the artisanal coffee ritual offers an authentic somatic experience anchored in communal presence.",
+      "sentences": [
+        "Coffee’s sociological trajectory reflects broader anthropological shifts toward curated consumerism and ritualized leisure.",
+        "Far beyond a biochemical stimulant, coffee acts as an omnipresent catalyst for deliberate contemplation and civic engagement.",
+        "In an era dominated by hyper-accelerated digital connectivity, the artisanal coffee ritual offers an authentic somatic experience anchored in communal presence."
+      ],
+      "audio": "/audio/01-coffee-culture/c1.mp3",
+      "sentenceAudios": [
+        "/audio/01-coffee-culture/c1_s0.mp3",
+        "/audio/01-coffee-culture/c1_s1.mp3",
+        "/audio/01-coffee-culture/c1_s2.mp3"
+      ],
+      "chunks": [
+        [
+          "Coffee’s sociological trajectory",
+          "reflects",
+          "broader anthropological shifts",
+          "toward",
+          "curated consumerism",
+          "and ritualized leisure."
+        ],
+        [
+          "Far beyond",
+          "a biochemical stimulant,",
+          "coffee acts as",
+          "an omnipresent catalyst",
+          "for deliberate contemplation",
+          "and civic engagement."
+        ],
+        [
+          "In an era dominated",
+          "by hyper-accelerated",
+          "digital connectivity,",
+          "the artisanal coffee ritual",
+          "offers",
+          "an authentic somatic experience",
+          "anchored in",
+          "communal presence."
+        ]
+      ],
+      "gistQuestion": {
+        "question": "How does the author characterize coffee in modern society?",
+        "options": [
+          "As an obsolete beverage with decreasing relevance",
+          "As a somatic anchor and sociological catalyst amid digital acceleration",
+          "As a purely chemical product devoid of cultural meaning"
+        ],
+        "correct": 1
+      },
+      "gaps": [
+        {
+          "target": "anthropological",
+          "options": ["accidental", "anthropological", "monetary"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "catalyst",
+          "options": ["barrier", "catalyst", "substitute"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "communal",
+          "options": ["isolated", "communal", "artificial"],
+          "sentenceIndex": 2
+        }
+      ]
+    },
+    "C2": {
+      "fullText": "The pervasive hegemony of coffee across disparate civilizations exemplifies how an indigenous Ethiopian botanical commodity was systematically transmuted into the quintessential sacrament of industrial modernity. By sublimating solitary contemplation into shared metropolitan discourse, the contemporary cafe remains a bastion of democratic exchange, interrogating our relentless pursuit of productivity through the lens of convivial pause.",
+      "sentences": [
+        "The pervasive hegemony of coffee across disparate civilizations exemplifies how an indigenous Ethiopian botanical commodity was systematically transmuted into the quintessential sacrament of industrial modernity.",
+        "By sublimating solitary contemplation into shared metropolitan discourse, the contemporary cafe remains a bastion of democratic exchange, interrogating our relentless pursuit of productivity through the lens of convivial pause."
+      ],
+      "audio": "/audio/01-coffee-culture/c2.mp3",
+      "sentenceAudios": [
+        "/audio/01-coffee-culture/c2_s0.mp3",
+        "/audio/01-coffee-culture/c2_s1.mp3"
+      ],
+      "chunks": [
+        [
+          "The pervasive hegemony",
+          "of coffee",
+          "across disparate civilizations",
+          "exemplifies",
+          "how an indigenous",
+          "Ethiopian botanical commodity",
+          "was systematically transmuted",
+          "into the quintessential sacrament",
+          "of industrial modernity."
+        ],
+        [
+          "By sublimating",
+          "solitary contemplation",
+          "into shared metropolitan discourse,",
+          "the contemporary cafe",
+          "remains a bastion",
+          "of democratic exchange,",
+          "interrogating",
+          "our relentless pursuit",
+          "of productivity",
+          "through the lens",
+          "of convivial pause."
+        ]
+      ],
+      "gistQuestion": {
+        "question": "What profound philosophical paradox does the text articulate?",
+        "options": [
+          "Coffee's evolution into an industrial sacrament that simultaneously invites convivial pause against relentless productivity",
+          "The superiority of tea rituals over modern industrial coffee production",
+          "The complete collapse of democratic dialogue in urban public establishments"
         ],
         "correct": 0
       },
       "gaps": [
-        { "sentenceIndex": 0, "target": "transcends", "options": ["transcends", "restricts", "diminishes"] },
-        { "sentenceIndex": 1, "target": "sanctuaries", "options": ["sanctuaries", "barriers", "hazards"] },
-        { "sentenceIndex": 2, "target": "exemplifies", "options": ["exemplifies", "contradicts", "obscures"] }
+        {
+          "target": "transmuted",
+          "options": ["demolished", "transmuted", "concealed"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "discourse",
+          "options": ["discourse", "silence", "stagnation"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "convivial",
+          "options": ["hostile", "rigid", "convivial"],
+          "sentenceIndex": 1
+        }
       ]
     }
   }
