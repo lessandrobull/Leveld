@@ -59,7 +59,7 @@ export default function ExerciseRoom() {
       ? 'Listen to the audio and fill in the 3 gaps:'
       : 'Ouça o áudio e preencha as 3 lacunas:',
     step2GapTag: (i: number) => (isL2 ? `[ Gap ${i} ]` : `[ Lacuna ${i} ]`),
-    step2GapLabel: (i: number) => (isL2 ? `Gap ${i}:` : `Lacuna ${i}:`),
+    step2GapLabel: (i: number) => (isL2 ? `Gap ${i}` : `Lacuna ${i}`),
     step2Btn: isL2 ? 'Proceed to Step 3 →' : 'Avançar para Etapa 3 →',
 
     // Etapa 3
@@ -210,17 +210,17 @@ export default function ExerciseRoom() {
           <div className="flex items-center gap-3">
             <Link
               href={`/level/${level}`}
-              className="text-xs text-neutral-400 hover:text-white transition flex items-center gap-1"
+              className="text-sm text-neutral-400 hover:text-white transition flex items-center gap-1"
             >
               {t.backTexts}
             </Link>
             <span className="text-neutral-600">|</span>
-            <h1 className="text-lg font-bold tracking-tight text-white">Leveld</h1>
+            <h1 className="text-xl font-bold tracking-tight text-white">Leveld</h1>
           </div>
 
           <div className="flex items-center gap-1.5">
-            <span className="text-xs text-neutral-400">{t.langLabel}</span>
-            <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-600 text-white">
+            <span className="text-sm text-neutral-400">{t.langLabel}</span>
+            <span className="px-3 py-1 rounded-lg text-sm font-bold bg-blue-600 text-white">
               {level}
             </span>
           </div>
@@ -228,7 +228,7 @@ export default function ExerciseRoom() {
 
         {/* LINHA 2: Título Centralizado */}
         <div className="pb-2.5 shrink-0 text-center">
-          <h2 className="text-base sm:text-lg font-semibold text-neutral-200 truncate">
+          <h2 className="text-lg sm:text-xl font-semibold text-neutral-200 truncate">
             {lessonData.title}
           </h2>
         </div>
@@ -251,9 +251,10 @@ export default function ExerciseRoom() {
 
               {/* Coluna Direita (PC) / Superior (Mobile) */}
               <div className="flex-1 flex flex-col justify-between min-w-0">
-                {/* Progresso das Etapas */}
+                
+                {/* Progresso das Etapas (Centralizado) */}
                 <div className="mb-2">
-                  <div className="flex justify-between text-xs text-neutral-400 mb-1">
+                  <div className="text-center text-sm font-medium text-neutral-400 mb-1.5">
                     <span>{t.stepCount(step)}</span>
                   </div>
                   <div className="w-full bg-neutral-800 h-1.5 rounded-full overflow-hidden">
@@ -264,11 +265,11 @@ export default function ExerciseRoom() {
                   </div>
                 </div>
 
-                {/* Orientações e Player */}
-                <div className="bg-neutral-950/60 p-2.5 rounded-xl border border-neutral-800/80">
+                {/* Orientações e Player (Textos Centralizados) */}
+                <div className="bg-neutral-950/60 p-3 rounded-xl border border-neutral-800/80">
                   {step === 1 && (
-                    <div>
-                      <p className="text-xs text-neutral-300 mb-1.5">{t.step1Instruction}</p>
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step1Instruction}</p>
                       <audio
                         key={`${level}-1`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
@@ -281,8 +282,8 @@ export default function ExerciseRoom() {
                   )}
 
                   {step === 2 && (
-                    <div>
-                      <p className="text-xs text-neutral-300 mb-1.5">{t.step2Instruction}</p>
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step2Instruction}</p>
                       <audio
                         key={`${level}-2`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
@@ -295,12 +296,12 @@ export default function ExerciseRoom() {
                   )}
 
                   {step === 3 && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex flex-col items-center gap-2 text-center">
                       <div>
-                        <span className="text-xs text-neutral-400 block">
+                        <span className="text-sm text-neutral-400 block mb-0.5">
                           {t.sentenceCount(sentenceIndex + 1, sentences.length)}
                         </span>
-                        <p className="text-xs text-neutral-300">{t.step3Instruction}</p>
+                        <p className="text-sm text-neutral-300">{t.step3Instruction}</p>
                       </div>
                       <audio
                         key={`step3-${level}-${sentenceIndex}`}
@@ -308,18 +309,18 @@ export default function ExerciseRoom() {
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
-                        className="w-full sm:w-60 h-8 shrink-0"
+                        className="w-full max-w-md h-8 shrink-0"
                       />
                     </div>
                   )}
 
                   {step === 4 && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex flex-col items-center gap-2 text-center">
                       <div>
-                        <span className="text-xs text-neutral-400 block">
+                        <span className="text-sm text-neutral-400 block mb-0.5">
                           {t.sentenceCount(sentenceIndex + 1, sentences.length)}
                         </span>
-                        <p className="text-xs text-neutral-300">{t.step4Instruction}</p>
+                        <p className="text-sm text-neutral-300">{t.step4Instruction}</p>
                       </div>
                       <audio
                         key={`step4-${level}-${sentenceIndex}`}
@@ -327,18 +328,18 @@ export default function ExerciseRoom() {
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
-                        className="w-full sm:w-60 h-8 shrink-0"
+                        className="w-full max-w-md h-8 shrink-0"
                       />
                     </div>
                   )}
 
                   {step === 5 && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex flex-col items-center gap-2 text-center">
                       <div>
-                        <span className="text-xs text-neutral-400 block">
+                        <span className="text-sm text-neutral-400 block mb-0.5">
                           {t.sentenceCount(sentenceIndex + 1, sentences.length)}
                         </span>
-                        <p className="text-xs text-neutral-300">{t.step5Instruction}</p>
+                        <p className="text-sm text-neutral-300">{t.step5Instruction}</p>
                       </div>
                       <audio
                         key={`step5-${level}-${sentenceIndex}`}
@@ -346,18 +347,18 @@ export default function ExerciseRoom() {
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
-                        className="w-full sm:w-60 h-8 shrink-0"
+                        className="w-full max-w-md h-8 shrink-0"
                       />
                     </div>
                   )}
 
                   {step === 6 && (
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div className="flex flex-col items-center gap-2 text-center">
                       <div>
-                        <span className="text-xs text-neutral-400 block">
+                        <span className="text-sm text-neutral-400 block mb-0.5">
                           {t.sentenceCount(sentenceIndex + 1, sentences.length)}
                         </span>
-                        <p className="text-xs text-neutral-300">{t.step6Instruction}</p>
+                        <p className="text-sm text-neutral-300">{t.step6Instruction}</p>
                       </div>
                       <audio
                         key={`step6-${level}-${sentenceIndex}`}
@@ -365,26 +366,24 @@ export default function ExerciseRoom() {
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
-                        className="w-full sm:w-60 h-8 shrink-0"
+                        className="w-full max-w-md h-8 shrink-0"
                       />
                     </div>
                   )}
 
                   {step === 7 && (
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-xs text-neutral-400 block">
-                          {t.sentenceCount(sentenceIndex + 1, sentences.length)}
-                        </span>
-                        <p className="text-xs text-neutral-300">{t.step7Instruction}</p>
-                      </div>
-                      <span className="text-[11px] text-neutral-500 font-mono">{t.step7NoAudio}</span>
+                    <div className="flex flex-col items-center text-center gap-1">
+                      <span className="text-sm text-neutral-400 block">
+                        {t.sentenceCount(sentenceIndex + 1, sentences.length)}
+                      </span>
+                      <p className="text-sm text-neutral-300">{t.step7Instruction}</p>
+                      <span className="text-xs text-neutral-500 font-mono mt-0.5">{t.step7NoAudio}</span>
                     </div>
                   )}
 
                   {step === 8 && (
-                    <div>
-                      <p className="text-xs text-neutral-300 mb-1.5">{t.step8Instruction}</p>
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step8Instruction}</p>
                       <audio
                         key={`${level}-8`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
@@ -406,15 +405,15 @@ export default function ExerciseRoom() {
               {step === 1 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div className="p-3 bg-neutral-950 rounded-xl border border-neutral-800">
-                    <p className="text-sm font-semibold text-neutral-200 mb-2">
+                    <p className="text-base font-semibold text-neutral-200 mb-2.5 text-center">
                       {t.step1Question}
                     </p>
-                    <div className="space-y-1.5">
+                    <div className="space-y-2">
                       {(currentLevelData as any).gistQuestion?.options.map((opt: string, idx: number) => (
                         <button
                           key={idx}
                           onClick={() => setGistSelected(idx)}
-                          className={`w-full text-left p-2 rounded-lg text-xs font-medium border transition ${
+                          className={`w-full text-left p-2.5 rounded-lg text-sm font-medium border transition ${
                             gistSelected === idx
                               ? gistSelected === (currentLevelData as any).gistQuestion?.correct
                                 ? 'border-emerald-500 bg-emerald-950/40 text-emerald-200'
@@ -430,7 +429,7 @@ export default function ExerciseRoom() {
                   <button
                     disabled={gistSelected !== (currentLevelData as any).gistQuestion?.correct}
                     onClick={() => setStep(2)}
-                    className="w-full mt-3 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-xs transition"
+                    className="w-full mt-3 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition"
                   >
                     {t.step1Btn}
                   </button>
@@ -441,7 +440,7 @@ export default function ExerciseRoom() {
               {step === 2 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    <div className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 text-xs sm:text-sm text-neutral-300 leading-relaxed mb-3 text-justify">
+                    <div className="p-3.5 bg-neutral-950 rounded-xl border border-neutral-800 text-sm sm:text-base text-neutral-300 leading-relaxed mb-3 text-justify">
                       {sentences.map((sent, sIdx) => {
                         const gapObj = gapsData.find((g: any) => g.sentenceIndex === sIdx);
                         if (!gapObj) return <span key={sIdx}>{sent} </span>;
@@ -468,10 +467,10 @@ export default function ExerciseRoom() {
                       })}
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-2">
                       {gapsData.map((gap: any, gIdx: number) => (
-                        <div key={gIdx} className="p-2 bg-neutral-950 rounded-lg border border-neutral-800">
-                          <span className="text-[11px] font-semibold text-neutral-400 block mb-1">
+                        <div key={gIdx} className="p-2.5 bg-neutral-950 rounded-lg border border-neutral-800">
+                          <span className="text-xs font-semibold text-neutral-400 block mb-1.5 text-center uppercase tracking-wider">
                             {t.step2GapLabel(gIdx + 1)}
                           </span>
                           <div className="flex gap-1.5">
@@ -479,7 +478,7 @@ export default function ExerciseRoom() {
                               <button
                                 key={oIdx}
                                 onClick={() => setGapAnswers((prev) => ({ ...prev, [gIdx]: opt }))}
-                                className={`flex-1 py-1 rounded text-xs font-medium border transition ${
+                                className={`flex-1 py-1.5 rounded text-sm font-medium border transition ${
                                   gapAnswers[gIdx] === opt
                                     ? opt === gap.target
                                       ? 'bg-emerald-950 border-emerald-500 text-emerald-300'
@@ -502,7 +501,7 @@ export default function ExerciseRoom() {
                       setSentenceIndex(0);
                       setStep(3);
                     }}
-                    className="w-full mt-2 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-xs transition"
+                    className="w-full mt-2 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition"
                   >
                     {t.step2Btn}
                   </button>
@@ -513,15 +512,15 @@ export default function ExerciseRoom() {
               {step === 3 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    <div className="min-h-12 p-2.5 bg-neutral-950 border border-dashed border-neutral-700 rounded-xl flex flex-wrap gap-1.5 items-center mb-2.5">
+                    <div className="min-h-12 p-3 bg-neutral-950 border border-dashed border-neutral-700 rounded-xl flex flex-wrap gap-2 items-center mb-3">
                       {selectedUnits.length === 0 ? (
-                        <span className="text-xs text-neutral-500">{t.step3Prompt}</span>
+                        <span className="text-sm text-neutral-500">{t.step3Prompt}</span>
                       ) : (
                         selectedUnits.map((unit, i) => (
                           <button
                             key={i}
                             onClick={() => handleUnitClick(unit, false)}
-                            className="px-2.5 py-1 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-500 transition"
+                            className="px-3 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-500 transition"
                           >
                             {unit}
                           </button>
@@ -529,12 +528,12 @@ export default function ExerciseRoom() {
                       )}
                     </div>
 
-                    <div className="flex flex-wrap gap-1.5 mb-3">
+                    <div className="flex flex-wrap gap-2 mb-3">
                       {availableUnits.map((unit, i) => (
                         <button
                           key={i}
                           onClick={() => handleUnitClick(unit, true)}
-                          className="px-2.5 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-lg hover:bg-neutral-700 transition"
+                          className="px-3 py-1.5 bg-neutral-800 text-neutral-300 text-sm rounded-lg hover:bg-neutral-700 transition"
                         >
                           {unit}
                         </button>
@@ -543,7 +542,7 @@ export default function ExerciseRoom() {
 
                     {orderFeedback && (
                       <p
-                        className={`text-xs font-semibold mb-2 text-center ${
+                        className={`text-sm font-semibold mb-2 text-center ${
                           orderFeedback === 'correct' ? 'text-emerald-400' : 'text-rose-400'
                         }`}
                       >
@@ -555,14 +554,14 @@ export default function ExerciseRoom() {
                   <div className="flex gap-2">
                     <button
                       onClick={checkOrder}
-                      className="w-1/2 py-2 bg-neutral-800 hover:bg-neutral-700 font-semibold rounded-xl text-xs transition"
+                      className="w-1/2 py-2.5 bg-neutral-800 hover:bg-neutral-700 font-semibold rounded-xl text-sm transition"
                     >
                       {t.step3CheckBtn}
                     </button>
                     <button
                       onClick={nextSentenceOrStep}
                       disabled={orderFeedback !== 'correct'}
-                      className="w-1/2 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-xs transition"
+                      className="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition"
                     >
                       {t.step3NextBtn}
                     </button>
@@ -580,7 +579,7 @@ export default function ExerciseRoom() {
                       onChange={(e) => setTypedInput(e.target.value)}
                       placeholder={t.step4Placeholder}
                       rows={2}
-                      className={`w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2.5 text-xs sm:text-sm focus:outline-none focus:border-blue-500 mb-2 resize-none ${
+                      className={`w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-sm sm:text-base focus:outline-none focus:border-blue-500 mb-2 resize-none ${
                         isTypingLocked ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     />
@@ -588,14 +587,14 @@ export default function ExerciseRoom() {
                     {typingFeedback && (
                       <div className="mb-2 text-center">
                         {typingFeedback === 'correct' ? (
-                          <p className="text-xs font-semibold text-emerald-400">{t.step4Correct}</p>
+                          <p className="text-sm font-semibold text-emerald-400">{t.step4Correct}</p>
                         ) : (
                           <div className="flex items-center justify-center gap-2">
-                            <span className="text-xs font-semibold text-rose-400">{t.step4Wrong}</span>
+                            <span className="text-sm font-semibold text-rose-400">{t.step4Wrong}</span>
                             <button
                               type="button"
                               onClick={handleRetryTyping}
-                              className="px-2.5 py-0.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md text-xs font-medium transition"
+                              className="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md text-sm font-medium transition"
                             >
                               {t.step4Retry}
                             </button>
@@ -609,14 +608,14 @@ export default function ExerciseRoom() {
                     <button
                       onClick={checkTyping}
                       disabled={isTypingLocked && typingFeedback === 'wrong'}
-                      className="w-1/2 py-2 bg-neutral-800 hover:bg-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-xs transition"
+                      className="w-1/2 py-2.5 bg-neutral-800 hover:bg-neutral-700 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition"
                     >
                       {t.step4CheckBtn}
                     </button>
                     <button
                       onClick={nextSentenceOrStep}
                       disabled={typingFeedback !== 'correct'}
-                      className="w-1/2 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-xs transition"
+                      className="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-30 disabled:cursor-not-allowed font-semibold rounded-xl text-sm transition"
                     >
                       {t.step4NextBtn}
                     </button>
@@ -627,12 +626,12 @@ export default function ExerciseRoom() {
               {/* ETAPA 5 */}
               {step === 5 && (
                 <div className="flex-1 flex flex-col justify-between text-center">
-                  <div className="p-3 bg-neutral-950 border border-neutral-800 rounded-xl text-sm sm:text-base font-medium text-neutral-200 my-auto">
+                  <div className="p-4 bg-neutral-950 border border-neutral-800 rounded-xl text-base sm:text-lg font-medium text-neutral-200 my-auto">
                     "{currentSentence}"
                   </div>
                   <button
                     onClick={nextSentenceOrStep}
-                    className="w-full py-2 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-xs transition"
+                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
                   >
                     {t.nextSentenceBtn}
                   </button>
@@ -642,13 +641,13 @@ export default function ExerciseRoom() {
               {/* ETAPA 6 */}
               {step === 6 && (
                 <div className="flex-1 flex flex-col justify-between text-center">
-                  <div className="p-5 bg-neutral-950/60 border border-dashed border-neutral-800 rounded-xl my-auto flex flex-col items-center justify-center">
-                    <span className="text-2xl mb-1">🎧</span>
-                    <span className="text-xs text-neutral-500 font-medium">{t.step6Hidden}</span>
+                  <div className="p-6 bg-neutral-950/60 border border-dashed border-neutral-800 rounded-xl my-auto flex flex-col items-center justify-center">
+                    <span className="text-3xl mb-1.5">🎧</span>
+                    <span className="text-sm text-neutral-500 font-medium">{t.step6Hidden}</span>
                   </div>
                   <button
                     onClick={nextSentenceOrStep}
-                    className="w-full py-2 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-xs transition"
+                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
                   >
                     {t.nextSentenceBtn}
                   </button>
@@ -658,12 +657,12 @@ export default function ExerciseRoom() {
               {/* ETAPA 7 */}
               {step === 7 && (
                 <div className="flex-1 flex flex-col justify-between text-center">
-                  <div className="p-3 bg-neutral-950 border border-neutral-800 rounded-xl text-sm sm:text-base font-medium text-neutral-200 my-auto">
+                  <div className="p-4 bg-neutral-950 border border-neutral-800 rounded-xl text-base sm:text-lg font-medium text-neutral-200 my-auto">
                     "{currentSentence}"
                   </div>
                   <button
                     onClick={nextSentenceOrStep}
-                    className="w-full py-2 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-xs transition"
+                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
                   >
                     {t.nextSentenceBtn}
                   </button>
@@ -673,7 +672,7 @@ export default function ExerciseRoom() {
               {/* ETAPA 8 (Kindle Style Justified) */}
               {step === 8 && (
                 <div className="flex-1 flex flex-col justify-between">
-                  <div className="p-3.5 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-200 leading-relaxed text-xs sm:text-sm mb-3 text-justify">
+                  <div className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-200 leading-relaxed text-sm sm:text-base mb-3 text-justify">
                     {currentLevelData.fullText}
                   </div>
                   <button
@@ -681,7 +680,7 @@ export default function ExerciseRoom() {
                       setStep(1);
                       setSentenceIndex(0);
                     }}
-                    className="w-full py-2 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-xl text-xs transition"
+                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-xl text-sm transition"
                   >
                     {t.step8CompleteBtn}
                   </button>
