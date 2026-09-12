@@ -61,8 +61,7 @@ export default function LevelSelector() {
             href="/test"
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-medium text-neutral-400 bg-neutral-900/80 border border-neutral-800 hover:border-neutral-700 hover:text-white transition"
           >
-            <span>🛠️</span>
-            <span>Área de Testes (Sandbox / Dev Mode)</span>
+            <span>Área de Testes</span>
           </Link>
         </div>
 
