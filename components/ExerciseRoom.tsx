@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import lessonData from '../data/lessons/01-coffee-culture.json';
+import { useSearchParams, useParams } from 'next/navigation';
+import lesson01 from '../data/lessons/01-coffee-culture.json';
+import lesson02 from '../data/lessons/02-remote-work.json';
 
 type LevelKey = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
@@ -12,76 +13,20 @@ interface UnitSlot {
   text: string;
 }
 
-// Divisor sintático 100% automático: garante blocos de 2 a 3 palavras com sentido
-function smartChunkSentence(sentence: string): string[] {
-  const rawWords = sentence.trim().split(/\s+/);
-  if (rawWords.length <= 3) return rawWords;
-
-  const markers = new Set([
-    'of', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'from', 'into',
-    'through', 'about', 'over', 'under', 'between', 'without',
-    'and', 'but', 'or', 'while', 'as', 'because', 'although',
-    'which', 'that', 'who', 'where', 'when',
-    'the', 'a', 'an', 'this', 'these', 'those'
-  ]);
-
-  const chunks: string[] = [];
-  let current: string[] = [];
-
-  for (let i = 0; i < rawWords.length; i++) {
-    const word = rawWords[i];
-    const clean = word.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').toLowerCase();
-    const prevWord = current[current.length - 1] || '';
-    const prevHadPunctuation = /[.,;!?]$/.test(prevWord);
-    const isGerund = clean.length > 4 && clean.endsWith('ing');
-    const isMarker = markers.has(clean);
-
-    // Antecipação de vírgula nas próximas 1 a 3 palavras
-    const wordsUntilComma = rawWords.slice(i, i + 3).findIndex((w) => /[.,;!?]$/.test(w));
-    const commaComingSoon = wordsUntilComma !== -1 && current.length >= 1;
-
-    // Prevenção de palavra órfã no fim da frase (se restam 2 palavras e já temos 2, fecha o bloco atual)
-    const remainingWords = rawWords.length - i;
-    const balanceEnd = remainingWords === 2 && current.length >= 2;
-
-    let shouldBreak = false;
-
-    if (current.length > 0) {
-      if (prevHadPunctuation) {
-        shouldBreak = true;
-      } else if (balanceEnd) {
-        shouldBreak = true;
-      } else if ((isMarker || isGerund) && current.length >= 2) {
-        shouldBreak = true;
-      } else if (commaComingSoon && wordsUntilComma === 2 && current.length >= 1) {
-        // Isola o verbo anterior para deixar as 3 palavras seguintes até a vírgula juntas
-        shouldBreak = true;
-      } else if (current.length >= 3) {
-        shouldBreak = true;
-      }
-    }
-
-    if (shouldBreak) {
-      chunks.push(current.join(' '));
-      current = [word];
-    } else {
-      current.push(word);
-    }
-  }
-
-  if (current.length > 0) {
-    if (current.length === 1 && chunks.length > 0 && chunks[chunks.length - 1].split(' ').length <= 2) {
-      chunks[chunks.length - 1] += ' ' + current.join(' ');
-    } else {
-      chunks.push(current.join(' '));
-    }
-  }
-
-  return chunks;
-}
+// Mapa de Lições cadastradas no sistema
+const lessonsMap: Record<string, any> = {
+  '01-coffee-culture': lesson01,
+  '02-remote-work': lesson02,
+};
 
 export default function ExerciseRoom() {
+  const params = useParams();
   const searchParams = useSearchParams();
+
+  // Identifica a lição pela URL (/lesson/[id])
+  const lessonId = (params?.id as string) || '01-coffee-culture';
+  const lessonData = lessonsMap[lessonId] || lesson01;
+
   const initialLvl = (searchParams.get('lvl') as LevelKey) || 'A1';
 
   const [level, setLevel] = useState<LevelKey>(initialLvl);
@@ -187,27 +132,27 @@ export default function ExerciseRoom() {
     ? { A1: 0.9, A2: 0.9, B1: 0.95, B2: 0.95, C1: 1.0, C2: 1.0 }
     : { A1: 0.8, A2: 0.8, B1: 0.85, B2: 0.85, C1: 0.9, C2: 0.9 };
 
-  // Inicialização da Etapa 3 com Chunks Automáticos
- useEffect(() => {
-  if (step === 3 && currentSentence) {
-    let units: string[] = [];
-    const jsonChunks = (currentLevelData as any).chunks?.[sentenceIndex];
+  // Inicialização da Etapa 3 com Chunks Semânticos
+  useEffect(() => {
+    if (step === 3 && currentSentence) {
+      let units: string[] = [];
+      const jsonChunks = (currentLevelData as any).chunks?.[sentenceIndex];
 
-    if (jsonChunks && Array.isArray(jsonChunks)) {
-      units = jsonChunks;
-    } else {
-      units = currentSentence
-        .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
-        .split(' ')
-        .filter(Boolean);
+      if (jsonChunks && Array.isArray(jsonChunks)) {
+        units = jsonChunks;
+      } else {
+        units = currentSentence
+          .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
+          .split(' ')
+          .filter(Boolean);
+      }
+
+      const slots: UnitSlot[] = units.map((text, idx) => ({ id: idx, text }));
+      setBankSlots([...slots].sort(() => Math.random() - 0.5));
+      setSelectedSlots([]);
+      setOrderFeedback(null);
     }
-
-    const slots: UnitSlot[] = units.map((text, idx) => ({ id: idx, text }));
-    setBankSlots([...slots].sort(() => Math.random() - 0.5));
-    setSelectedSlots([]);
-    setOrderFeedback(null);
-  }
-}, [step, sentenceIndex, currentSentence, level]);
+  }, [step, sentenceIndex, currentSentence, level, lessonId]);
 
   useEffect(() => {
     if (step === 4) {
@@ -352,7 +297,7 @@ export default function ExerciseRoom() {
                     <div className="text-center">
                       <p className="text-sm text-neutral-300 mb-2">{t.step1Instruction}</p>
                       <audio
-                        key={`${level}-1`}
+                        key={`${lessonId}-${level}-1`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
@@ -366,7 +311,7 @@ export default function ExerciseRoom() {
                     <div className="text-center">
                       <p className="text-sm text-neutral-300 mb-2">{t.step2Instruction}</p>
                       <audio
-                        key={`${level}-2`}
+                        key={`${lessonId}-${level}-2`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
@@ -380,7 +325,7 @@ export default function ExerciseRoom() {
                     <div className="flex flex-col items-center text-center gap-1.5">
                       <p className="text-sm text-neutral-300">{t.step3Instruction}</p>
                       <audio
-                        key={`step3-${level}-${sentenceIndex}`}
+                        key={`step3-${lessonId}-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
@@ -397,7 +342,7 @@ export default function ExerciseRoom() {
                     <div className="flex flex-col items-center text-center gap-1.5">
                       <p className="text-sm text-neutral-300">{t.step4Instruction}</p>
                       <audio
-                        key={`step4-${level}-${sentenceIndex}`}
+                        key={`step4-${lessonId}-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
@@ -414,7 +359,7 @@ export default function ExerciseRoom() {
                     <div className="flex flex-col items-center text-center gap-1.5">
                       <p className="text-sm text-neutral-300">{t.step5Instruction}</p>
                       <audio
-                        key={`step5-${level}-${sentenceIndex}`}
+                        key={`step5-${lessonId}-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
@@ -431,7 +376,7 @@ export default function ExerciseRoom() {
                     <div className="flex flex-col items-center text-center gap-1.5">
                       <p className="text-sm text-neutral-300">{t.step6Instruction}</p>
                       <audio
-                        key={`step6-${level}-${sentenceIndex}`}
+                        key={`step6-${lessonId}-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
@@ -458,7 +403,7 @@ export default function ExerciseRoom() {
                     <div className="text-center">
                       <p className="text-sm text-neutral-300 mb-2">{t.step8Instruction}</p>
                       <audio
-                        key={`${level}-8`}
+                        key={`${lessonId}-${level}-8`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
@@ -582,7 +527,7 @@ export default function ExerciseRoom() {
                 </div>
               )}
 
-              {/* ETAPA 3 (Módulo Fixo + Chunks Otimizados) */}
+              {/* ETAPA 3 */}
               {step === 3 && (
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
