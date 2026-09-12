@@ -16,7 +16,6 @@ export default function ExerciseRoom() {
   const params = useParams();
   const searchParams = useSearchParams();
 
-  // Identifica a lição dinâmica pela URL (/lesson/[id])
   const rawId = params?.id;
   const lessonId = Array.isArray(rawId) ? rawId[0] : (rawId as string) || lessons[0]?.id || '01-coffee-culture';
   const lessonData = lessonsMap[lessonId] || lessons[0];
@@ -47,7 +46,6 @@ export default function ExerciseRoom() {
   const sentences: string[] = currentLevelData.sentences || [];
   const currentSentence: string = sentences[sentenceIndex] || '';
 
-  // Calibração de Idioma das Orientações: A1/A2 (L1 - PT) | B1/B2/C1/C2 (L2 - EN)
   const isL2 = !['A1', 'A2'].includes(level);
 
   const t = {
@@ -93,6 +91,7 @@ export default function ExerciseRoom() {
     step4Placeholder: isL2 ? 'Type the sentence here...' : 'Digite a frase aqui...',
     step4Correct: isL2 ? 'Well done! Correctly typed.' : 'Muito bem! Frase digitada corretamente.',
     step4Wrong: isL2 ? 'Different from expected.' : 'Diferente do esperado.',
+    step4CorrectSentenceLabel: isL2 ? 'Correct sentence:' : 'Frase correta:',
     step4Retry: isL2 ? 'Try again' : 'Tentar de novo',
     step4CheckBtn: isL2 ? 'Check Typing' : 'Checar Digitação',
     step4NextBtn: isL2 ? 'Next' : 'Avançar',
@@ -120,13 +119,11 @@ export default function ExerciseRoom() {
     step8CompleteBtn: isL2 ? 'Complete and Return to Start' : 'Concluir e Voltar ao Início',
   };
 
-  // Calibração de Velocidade: Ímpar (Ava) vs Par (Andrew)
   const isAndrew = lessonData.voice === 'Andrew';
   const speedMap: Record<LevelKey, number> = isAndrew
     ? { A1: 0.9, A2: 0.9, B1: 0.95, B2: 0.95, C1: 1.0, C2: 1.0 }
     : { A1: 0.8, A2: 0.8, B1: 0.85, B2: 0.85, C1: 0.9, C2: 0.9 };
 
-  // Inicialização da Etapa 3 com Chunks Semânticos
   useEffect(() => {
     if (step === 3 && currentSentence) {
       let units: string[] = [];
@@ -191,6 +188,7 @@ export default function ExerciseRoom() {
   };
 
   const checkTyping = () => {
+    if (!typedInput.trim()) return;
     const cleanOriginal = currentSentence.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').trim().toLowerCase();
     const cleanTyped = typedInput.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').trim().toLowerCase();
     if (cleanOriginal === cleanTyped) {
@@ -252,7 +250,7 @@ export default function ExerciseRoom() {
           </h2>
         </div>
 
-        {/* LINHA 3 ATÉ O BOTTOM: Card de tamanho fixo */}
+        {/* LINHA 3 ATÉ O BOTTOM: Card */}
         <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 sm:p-5 shadow-sm flex-1 min-h-0 overflow-y-auto flex flex-col justify-between">
           <div className="flex-1 flex flex-col min-h-0">
             
@@ -271,7 +269,7 @@ export default function ExerciseRoom() {
               {/* Coluna Direita (PC) / Superior (Mobile) */}
               <div className="flex-1 flex flex-col justify-between min-w-0">
                 
-                {/* Progresso das Etapas (Centralizado) */}
+                {/* Progresso das Etapas */}
                 <div className="mb-2">
                   <div className="text-center text-sm font-medium text-neutral-400 mb-1.5">
                     <span>{t.stepCount(step)}</span>
@@ -316,15 +314,15 @@ export default function ExerciseRoom() {
                   )}
 
                   {step === 3 && (
-                    <div className="flex flex-col items-center text-center gap-1.5">
-                      <p className="text-sm text-neutral-300">{t.step3Instruction}</p>
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step3Instruction}</p>
                       <audio
                         key={`step3-${lessonId}-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
-                        className="w-full max-w-md h-8 shrink-0"
+                        className="w-full h-8 mb-1.5"
                       />
                       <span className="text-xs sm:text-sm text-neutral-400 font-medium">
                         {t.sentenceCount(sentenceIndex + 1, sentences.length)}
@@ -333,15 +331,15 @@ export default function ExerciseRoom() {
                   )}
 
                   {step === 4 && (
-                    <div className="flex flex-col items-center text-center gap-1.5">
-                      <p className="text-sm text-neutral-300">{t.step4Instruction}</p>
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step4Instruction}</p>
                       <audio
                         key={`step4-${lessonId}-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
-                        className="w-full max-w-md h-8 shrink-0"
+                        className="w-full h-8 mb-1.5"
                       />
                       <span className="text-xs sm:text-sm text-neutral-400 font-medium">
                         {t.sentenceCount(sentenceIndex + 1, sentences.length)}
@@ -350,15 +348,15 @@ export default function ExerciseRoom() {
                   )}
 
                   {step === 5 && (
-                    <div className="flex flex-col items-center text-center gap-1.5">
-                      <p className="text-sm text-neutral-300">{t.step5Instruction}</p>
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step5Instruction}</p>
                       <audio
                         key={`step5-${lessonId}-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
-                        className="w-full max-w-md h-8 shrink-0"
+                        className="w-full h-8 mb-1.5"
                       />
                       <span className="text-xs sm:text-sm text-neutral-400 font-medium">
                         {t.sentenceCount(sentenceIndex + 1, sentences.length)}
@@ -367,15 +365,15 @@ export default function ExerciseRoom() {
                   )}
 
                   {step === 6 && (
-                    <div className="flex flex-col items-center text-center gap-1.5">
-                      <p className="text-sm text-neutral-300">{t.step6Instruction}</p>
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step6Instruction}</p>
                       <audio
                         key={`step6-${lessonId}-${level}-${sentenceIndex}`}
                         ref={(el) => { if (el) el.playbackRate = speedMap[level]; }}
                         onPlay={(e) => { e.currentTarget.playbackRate = speedMap[level]; }}
                         controls
                         src={(currentLevelData as any).sentenceAudios?.[sentenceIndex]}
-                        className="w-full max-w-md h-8 shrink-0"
+                        className="w-full h-8 mb-1.5"
                       />
                       <span className="text-xs sm:text-sm text-neutral-400 font-medium">
                         {t.sentenceCount(sentenceIndex + 1, sentences.length)}
@@ -599,10 +597,18 @@ export default function ExerciseRoom() {
                       value={typedInput}
                       disabled={isTypingLocked}
                       onChange={(e) => setTypedInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          if (!isTypingLocked) {
+                            checkTyping();
+                          }
+                        }
+                      }}
                       placeholder={t.step4Placeholder}
                       rows={2}
                       className={`w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-sm sm:text-base focus:outline-none focus:border-blue-500 mb-2 resize-none ${
-                        isTypingLocked ? 'opacity-50 cursor-not-allowed' : ''
+                        isTypingLocked ? 'opacity-60 cursor-not-allowed' : ''
                       }`}
                     />
 
@@ -611,12 +617,22 @@ export default function ExerciseRoom() {
                         {typingFeedback === 'correct' ? (
                           <p className="text-sm font-semibold text-emerald-400">{t.step4Correct}</p>
                         ) : (
-                          <div className="flex items-center justify-center gap-2">
-                            <span className="text-sm font-semibold text-rose-400">{t.step4Wrong}</span>
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="p-3 bg-rose-950/40 border border-rose-900/60 rounded-xl w-full text-center">
+                              <span className="text-sm font-semibold text-rose-400 block mb-1.5">
+                                {t.step4Wrong}
+                              </span>
+                              <div className="text-sm text-neutral-200">
+                                <span className="text-xs text-neutral-400 uppercase tracking-wider block mb-0.5">
+                                  {t.step4CorrectSentenceLabel}
+                                </span>
+                                <p className="font-medium text-white italic">"{currentSentence}"</p>
+                              </div>
+                            </div>
                             <button
                               type="button"
                               onClick={handleRetryTyping}
-                              className="px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-md text-sm font-medium transition"
+                              className="px-4 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-lg text-sm font-medium transition"
                             >
                               {t.step4Retry}
                             </button>

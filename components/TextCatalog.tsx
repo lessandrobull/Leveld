@@ -65,7 +65,7 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
                     <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-blue-400 transition mb-1.5">
                       {lesson.title}
                     </h3>
-                    <p className="text-sm text-neutral-400 leading-relaxed">
+                    <p className="text-sm text-neutral-400 leading-relaxed text-justify">
                       {lesson.summary}
                     </p>
                   </div>
