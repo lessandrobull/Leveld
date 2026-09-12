@@ -26,17 +26,17 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="text-xs text-neutral-400 hover:text-white transition flex items-center gap-1"
+              className="text-sm text-neutral-400 hover:text-white transition flex items-center gap-1"
             >
               ← Trocar Nível
             </Link>
             <span className="text-neutral-600">|</span>
-            <h1 className="text-lg font-bold tracking-tight text-white">Leveld</h1>
+            <h1 className="text-xl font-bold tracking-tight text-white">Leveld</h1>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs text-neutral-400">Inglês:</span>
-            <span className="text-xs px-2.5 py-1 rounded bg-blue-600 font-bold text-white">
+            <span className="text-sm text-neutral-400">Inglês:</span>
+            <span className="text-sm px-3 py-1 rounded-lg bg-blue-600 font-bold text-white">
               {currentLevel}
             </span>
           </div>
@@ -44,7 +44,7 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
 
         {/* CATÁLOGO DE TEXTOS */}
         <section className="flex-1">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-neutral-400 mb-6 text-center">
+          <h2 className="text-base font-semibold uppercase tracking-wider text-neutral-400 mb-6 text-center">
             Escolha um texto para praticar
           </h2>
 
@@ -61,18 +61,13 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
                     alt={lesson.title}
                     className="w-full sm:w-36 h-32 object-cover rounded-xl shrink-0 group-hover:opacity-90 transition"
                   />
-                  <div className="flex flex-col justify-between flex-1">
-                    <div>
-                      <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition mb-1.5">
-                        {lesson.title}
-                      </h3>
-                      <p className="text-xs text-neutral-400 leading-relaxed">
-                        {lesson.summary}
-                      </p>
-                    </div>
-                    <div className="mt-3 text-xs font-semibold text-blue-400">
-                      Iniciar treino →
-                    </div>
+                  <div className="flex flex-col justify-center flex-1">
+                    <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-blue-400 transition mb-1.5">
+                      {lesson.title}
+                    </h3>
+                    <p className="text-sm text-neutral-400 leading-relaxed">
+                      {lesson.summary}
+                    </p>
                   </div>
                 </div>
               </Link>
