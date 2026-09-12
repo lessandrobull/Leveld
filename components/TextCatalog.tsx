@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import lesson01 from '../data/lessons/01-coffee-culture.json';
+import lesson02 from '../data/lessons/02-remote-work.json';
 
 type LevelKey = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
@@ -14,6 +15,12 @@ export default function TextCatalog({ level }: { level: LevelKey }) {
       title: lesson01.title,
       image: lesson01.image,
       summary: lesson01.levels[currentLevel]?.fullText.slice(0, 110) + '...',
+    },
+    {
+      id: lesson02.id,
+      title: lesson02.title,
+      image: lesson02.image,
+      summary: lesson02.levels[currentLevel]?.fullText.slice(0, 110) + '...',
     },
   ];
 
