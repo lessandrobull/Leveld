@@ -12,20 +12,30 @@ interface UnitSlot {
 }
 
 const levelsList: { key: LevelKey; name: string; desc: string }[] = [
-  { key: 'A1', name: 'Iniciante (A1)', desc: 'Frases curtas e vocabulário básico.' },
-  { key: 'A2', name: 'Básico (A2)', desc: 'Estruturas simples do cotidiano.' },
-  { key: 'B1', name: 'Intermediário (B1)', desc: 'Opiniões e descrições lineares.' },
-  { key: 'B2', name: 'Independente (B2)', desc: 'Textos com maior densidade lexical.' },
-  { key: 'C1', name: 'Avançado (C1)', desc: 'Estruturas sofisticadas e abstratas.' },
-  { key: 'C2', name: 'Domínio Pleno (C2)', desc: 'Nuances acadêmicas e estilísticas.' },
+  { key: 'A1', name: 'Iniciante', desc: 'Frases simples e vocabulário básico do dia a dia.' },
+  { key: 'A2', name: 'Básico', desc: 'Comunicação direta sobre tarefas rotineiras.' },
+  { key: 'B1', name: 'Intermediário', desc: 'Compreensão de pontos principais sobre temas comuns.' },
+  { key: 'B2', name: 'Independente', desc: 'Fluência em tópicos complexos e técnicos.' },
+  { key: 'C1', name: 'Avançado', desc: 'Compreensão ampla de textos longos e exigentes.' },
+  { key: 'C2', name: 'Domínio Pleno', desc: 'Facilidade para compreender tudo com precisão nativa.' },
+];
+
+const stepNames = [
+  { step: 1, title: 'Passo 1: Gist (Ideia Principal)' },
+  { step: 2, title: 'Passo 2: Gaps (Preenchimento de Lacunas)' },
+  { step: 3, title: 'Passo 3: Sintaxe (Ordenação de Chunks)' },
+  { step: 4, title: 'Passo 4: Ditado (Digitação)' },
+  { step: 5, title: 'Passo 5: Repetição com Texto' },
+  { step: 6, title: 'Passo 6: Repetição sem Texto' },
+  { step: 7, title: 'Passo 7: Leitura Solo' },
+  { step: 8, title: 'Passo 8: Texto Completo' },
 ];
 
 export default function TestPage() {
   const [selectedLevel, setSelectedLevel] = useState<LevelKey | null>(null);
-  const [step, setStep] = useState<number>(1);
-  const [sentenceIndex, setSentenceIndex] = useState<number>(0);
+  const [selectedStep, setSelectedStep] = useState<number | null>(null);
 
-  // Estados dos Exercícios
+  // Estados dos exercícios no Passo 1 ao 4
   const [gistSelected, setGistSelected] = useState<number | null>(null);
   const [gapAnswers, setGapAnswers] = useState<Record<number, string>>({});
   const [bankSlots, setBankSlots] = useState<UnitSlot[]>([]);
@@ -37,13 +47,77 @@ export default function TestPage() {
 
   const levelData = selectedLevel ? lesson01.levels[selectedLevel] : null;
   const sentences: string[] = levelData?.sentences || [];
-  const currentSentence: string = sentences[sentenceIndex] || '';
+  const currentSentence: string = sentences[0] || '';
 
-  // Chunks (Etapa 3)
+  const isL2 = selectedLevel ? !['A1', 'A2'].includes(selectedLevel) : false;
+
+  const t = {
+    backSteps: isL2 ? '← Steps' : '← Passos',
+    langLabel: isL2 ? 'English:' : 'Inglês:',
+    stepCount: (s: number) => (isL2 ? `Step ${s} of 8` : `Etapa ${s} de 8`),
+    sentenceCount: isL2 ? `Sentence 1 of ${sentences.length}` : `Frase 1 de ${sentences.length}`,
+
+    // Etapa 1
+    step1Instruction: isL2
+      ? 'Listen to the full audio and identify the main topic:'
+      : 'Ouça o áudio completo e identifique a ideia principal do texto:',
+    step1Question: isL2
+      ? (levelData as any)?.gistQuestion?.question || 'What is the main topic of this text?'
+      : 'Qual é o tema principal deste texto?',
+    step1Btn: isL2 ? 'Proceed to Step 2 →' : 'Avançar para Etapa 2 →',
+
+    // Etapa 2
+    step2Instruction: isL2
+      ? 'Listen to the audio and fill in the 3 gaps:'
+      : 'Ouça o áudio e preencha as 3 lacunas:',
+    step2GapTag: (i: number) => (isL2 ? `[ Gap ${i} ]` : `[ Lacuna ${i} ]`),
+    step2GapLabel: (i: number) => (isL2 ? `Gap ${i}` : `Lacuna ${i}`),
+    step2Btn: isL2 ? 'Proceed to Step 3 →' : 'Avançar para Etapa 3 →',
+
+    // Etapa 3
+    step3Instruction: isL2
+      ? 'Reconstruct the sentence in the correct order:'
+      : 'Reconstrua a frase na ordem correta:',
+    step3Prompt: isL2 ? 'Tap the blocks below to order the sentence...' : 'Toque nos blocos abaixo para ordenar a frase...',
+    step3Correct: isL2 ? 'Great! Correct order.' : 'Excelente! Ordem correta.',
+    step3Wrong: isL2 ? 'Incorrect. Tap a block to adjust.' : 'Incorreto. Toque em um bloco para ajustar.',
+    step3CheckBtn: isL2 ? 'Check' : 'Checar',
+    step3NextBtn: isL2 ? 'Next' : 'Avançar',
+
+    // Etapa 4
+    step4Instruction: isL2 ? 'Type exactly what you hear:' : 'Digite exatamente o que ouviu:',
+    step4Placeholder: isL2 ? 'Type the sentence here...' : 'Digite a frase aqui...',
+    step4Correct: isL2 ? 'Well done! Correctly typed.' : 'Muito bem! Frase digitada corretamente.',
+    step4Wrong: isL2 ? 'Different from expected.' : 'Diferente do esperado.',
+    step4CorrectSentenceLabel: isL2 ? 'Correct sentence:' : 'Frase correta:',
+    step4Retry: isL2 ? 'Try again' : 'Tentar de novo',
+    step4CheckBtn: isL2 ? 'Check Typing' : 'Checar Digitação',
+    step4NextBtn: isL2 ? 'Next' : 'Avançar',
+
+    // Etapa 5
+    step5Instruction: isL2 ? 'Repeat the sentence aloud with text support:' : 'Repita a frase em voz alta com apoio do texto:',
+    nextSentenceBtn: isL2 ? 'Next Sentence →' : 'Próxima Frase →',
+
+    // Etapa 6
+    step6Instruction: isL2 ? 'Repeat orally without the text on screen:' : 'Repita oralmente sem o texto na tela:',
+    step6Hidden: isL2 ? 'Text hidden in this step' : 'Texto oculto nesta etapa',
+
+    // Etapa 7
+    step7Instruction: isL2 ? 'Solo reading aloud:' : 'Leitura solo em voz alta:',
+    step7NoAudio: isL2 ? 'No audio' : 'Sem áudio',
+
+    // Etapa 8
+    step8Instruction: isL2
+      ? 'Play the audio to follow along, then read the entire text aloud:'
+      : 'Dê o play para acompanhar a leitura e em seguida leia o texto todo em voz alta:',
+    step8CompleteBtn: isL2 ? 'Complete and Return to Start' : 'Concluir e Voltar ao Início',
+  };
+
+  // Inicialização de Chunks (Passo 3)
   useEffect(() => {
-    if (step === 3 && currentSentence && levelData) {
+    if (selectedStep === 3 && currentSentence && levelData) {
       let units: string[] = [];
-      const jsonChunks = (levelData as any).chunks?.[sentenceIndex];
+      const jsonChunks = (levelData as any).chunks?.[0];
 
       if (jsonChunks && Array.isArray(jsonChunks)) {
         units = jsonChunks;
@@ -59,16 +133,16 @@ export default function TestPage() {
       setSelectedSlots([]);
       setOrderFeedback(null);
     }
-  }, [step, sentenceIndex, currentSentence, selectedLevel]);
+  }, [selectedStep, currentSentence, selectedLevel]);
 
-  // Ditado (Etapa 4)
+  // Inicialização do Ditado (Passo 4)
   useEffect(() => {
-    if (step === 4) {
+    if (selectedStep === 4) {
       setTypedInput('');
       setTypingFeedback(null);
       setIsTypingLocked(false);
     }
-  }, [step, sentenceIndex]);
+  }, [selectedStep]);
 
   const checkOrder = () => {
     const rawTarget = currentSentence.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '').trim().toLowerCase().replace(/\s+/g, ' ');
@@ -86,7 +160,9 @@ export default function TestPage() {
 
   const gapsData = (levelData as any)?.gaps || [];
 
-  // TELA 1: MENU DE NÍVEIS DE TESTE
+  // ==========================================
+  // TELA 1: ESCOLHA DO NÍVEL
+  // ==========================================
   if (!selectedLevel) {
     return (
       <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col items-center justify-center p-4 sm:p-6 font-sans">
@@ -94,19 +170,12 @@ export default function TestPage() {
           <header className="mb-6 flex items-center justify-between border-b border-neutral-800 pb-4">
             <div className="flex items-center gap-3">
               <Link href="/" className="text-sm text-neutral-400 hover:text-white transition">
-                ← Voltar à Home
+                Home
               </Link>
               <span className="text-neutral-700">|</span>
-              <span className="text-xs font-semibold px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                Sandbox Mode
-              </span>
+              <h1 className="text-lg font-bold text-white">Área de Testes</h1>
             </div>
-            <h1 className="text-lg font-bold text-white">Área de Testes</h1>
           </header>
-
-          <p className="text-sm text-neutral-400 mb-4 text-center">
-            Escolha o nível para inspecionar e testar qualquer tela da Lição 01:
-          </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {levelsList.map((lvl) => (
@@ -114,10 +183,9 @@ export default function TestPage() {
                 key={lvl.key}
                 onClick={() => {
                   setSelectedLevel(lvl.key);
-                  setStep(1);
-                  setSentenceIndex(0);
+                  setSelectedStep(null);
                 }}
-                className="p-4 rounded-xl border border-neutral-800 bg-neutral-900 hover:bg-neutral-800/80 hover:border-neutral-700 transition flex items-start gap-3 text-left group"
+                className="p-4 rounded-xl border border-neutral-800 bg-neutral-900/80 hover:bg-neutral-800/80 hover:border-neutral-700 transition flex items-start gap-3 text-left group"
               >
                 <span className="px-2.5 py-1 rounded-lg text-sm font-bold bg-blue-600/20 border border-blue-500/30 text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition">
                   {lvl.key}
@@ -138,143 +206,184 @@ export default function TestPage() {
     );
   }
 
-  // TELA 2: PAINEL DE CONTROLE MANUAL + CARD DO EXERCÍCIO
-  return (
-    <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col p-3 sm:p-5 font-sans">
-      <div className="max-w-4xl mx-auto w-full flex-1 flex flex-col gap-3">
+  // ==========================================
+  // TELA 2: ESCOLHA DO PASSO (SEM CARD NA TELA)
+  // ==========================================
+  if (selectedStep === null) {
+    return (
+      <main className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col items-center justify-center p-4 sm:p-6 font-sans">
+        <div className="max-w-xl w-full">
+          <header className="mb-6 flex items-center justify-between border-b border-neutral-800 pb-4">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setSelectedLevel(null)}
+                className="text-sm text-neutral-400 hover:text-white transition"
+              >
+                ← Níveis
+              </button>
+              <span className="text-neutral-700">|</span>
+              <h1 className="text-lg font-bold text-white">Área de Testes</h1>
+            </div>
 
-        {/* CABEÇALHO DO MODO DE TESTES */}
-        <header className="flex flex-wrap items-center justify-between gap-2 p-3 bg-neutral-900 border border-neutral-800 rounded-xl">
-          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs px-2.5 py-1 rounded-lg bg-blue-600 font-bold text-white">
+                {selectedLevel}
+              </span>
+            </div>
+          </header>
+
+          <div className="grid grid-cols-1 gap-2.5">
+            {stepNames.map((item) => (
+              <button
+                key={item.step}
+                onClick={() => setSelectedStep(item.step)}
+                className="w-full p-3.5 rounded-xl border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 hover:border-neutral-700 text-left font-semibold text-sm text-neutral-200 hover:text-blue-400 transition flex items-center justify-between"
+              >
+                <span>{item.title}</span>
+                <span className="text-xs text-neutral-500 font-mono">Abrir Card →</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // ==========================================
+  // TELA 3: O CARD REAL (LAYOUT IDÊNTICO AO ALUNO)
+  // ==========================================
+  return (
+    <main className="h-screen max-h-screen bg-neutral-950 text-neutral-100 flex flex-col p-3 sm:p-5 font-sans overflow-hidden">
+      <div className="max-w-2xl md:max-w-5xl mx-auto w-full flex-1 flex flex-col min-h-0">
+
+        {/* CABEÇALHO IDÊNTICO */}
+        <header className="flex items-center justify-between pb-2 shrink-0">
+          <div className="flex items-center gap-3">
             <button
-              onClick={() => setSelectedLevel(null)}
-              className="text-xs sm:text-sm text-neutral-400 hover:text-white transition flex items-center gap-1"
+              onClick={() => setSelectedStep(null)}
+              className="text-sm text-neutral-400 hover:text-white transition flex items-center gap-1"
             >
-              ← Trocar Nível de Teste
+              {t.backSteps}
             </button>
-            <span className="text-neutral-700">|</span>
-            <span className="text-xs px-2 py-0.5 rounded bg-blue-600 text-white font-bold">
-              {selectedLevel}
-            </span>
-            <span className="text-xs text-neutral-400 hidden sm:inline">Lição 01: Coffee Culture</span>
+            <span className="text-neutral-600">|</span>
+            <h1 className="text-xl font-bold tracking-tight text-white">Leveld</h1>
           </div>
 
           <div className="flex items-center gap-1.5">
-            {levelsList.map((lvl) => (
-              <button
-                key={lvl.key}
-                onClick={() => {
-                  setSelectedLevel(lvl.key);
-                  setSentenceIndex(0);
-                }}
-                className={`px-2 py-1 rounded text-xs font-semibold border transition ${
-                  selectedLevel === lvl.key
-                    ? 'bg-blue-600 border-blue-500 text-white'
-                    : 'bg-neutral-950 border-neutral-800 text-neutral-400 hover:text-white'
-                }`}
-              >
-                {lvl.key}
-              </button>
-            ))}
+            <span className="text-sm text-neutral-400">{t.langLabel}</span>
+            <span className="px-3 py-1 rounded-lg text-sm font-bold bg-blue-600 text-white">
+              {selectedLevel}
+            </span>
           </div>
         </header>
 
-        {/* PAINEL DE ATALHOS RÁPIDOS (ETAPAS E FRASES) */}
-        <div className="p-3 bg-neutral-900 border border-neutral-800 rounded-xl">
-          <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
-            Atalhos Diretos de Exercícios:
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-1.5 mb-2.5">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
-              <button
-                key={s}
-                onClick={() => {
-                  setStep(s);
-                  setSentenceIndex(0);
-                }}
-                className={`py-1.5 px-2 rounded-lg text-xs font-medium border text-center transition ${
-                  step === s
-                    ? 'bg-blue-600 border-blue-500 text-white font-bold shadow'
-                    : 'bg-neutral-950 border-neutral-800 text-neutral-300 hover:border-neutral-700'
-                }`}
-              >
-                Etapa {s}
-              </button>
-            ))}
-          </div>
-
-          {/* SELETOR DE FRASES (Disponível nas Etapas 3 a 7) */}
-          {[3, 4, 5, 6, 7].includes(step) && (
-            <div className="flex items-center gap-1.5 pt-2 border-t border-neutral-800 flex-wrap">
-              <span className="text-xs text-neutral-400 mr-1">Ir para Frase:</span>
-              {sentences.map((_, idx: number) => (
-                <button
-                  key={idx}
-                  onClick={() => setSentenceIndex(idx)}
-                  className={`px-3 py-1 rounded text-xs font-medium border transition ${
-                    sentenceIndex === idx
-                      ? 'bg-emerald-600 border-emerald-500 text-white font-bold'
-                      : 'bg-neutral-950 border-neutral-800 text-neutral-300 hover:border-neutral-700'
-                  }`}
-                >
-                  Frase {idx + 1}
-                </button>
-              ))}
-            </div>
-          )}
+        {/* TÍTULO DA LIÇÃO */}
+        <div className="pb-2.5 shrink-0 text-center">
+          <h2 className="text-lg sm:text-xl font-semibold text-neutral-200 truncate">
+            {lesson01.title}
+          </h2>
         </div>
 
-        {/* CARD DO EXERCÍCIO EM MODO SANDBOX */}
-        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 sm:p-5 shadow-sm flex-1 flex flex-col justify-between">
-          <div className="flex-1 flex flex-col">
-            
-            {/* TOPO: IMAGEM + PLAYER */}
-            <div className="flex flex-col md:flex-row md:items-start gap-4 mb-3">
-              <div className={`${step === 2 ? 'hidden md:block' : 'block'} shrink-0`}>
+        {/* CARD PRINCIPAL */}
+        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-4 sm:p-5 shadow-sm flex-1 min-h-0 overflow-y-auto flex flex-col justify-between">
+          <div className="flex-1 flex flex-col min-h-0">
+
+            {/* BLOCO SUPERIOR */}
+            <div className="flex flex-col md:flex-row md:items-start gap-4 mb-3 shrink-0">
+              <div className={`${selectedStep === 2 ? 'hidden md:block' : 'block'} shrink-0`}>
                 <img
                   src={lesson01.image}
                   alt={lesson01.title}
-                  className="w-full h-28 md:w-48 md:h-28 object-cover rounded-xl border border-neutral-800"
+                  className="w-full h-32 md:w-56 md:h-32 lg:w-64 lg:h-36 object-cover rounded-xl border border-neutral-800 shadow-sm"
                 />
               </div>
 
               <div className="flex-1 flex flex-col justify-between min-w-0">
-                <div className="text-center text-xs font-semibold text-neutral-400 mb-1.5 uppercase tracking-wider">
-                  Etapa {step} de 8 {sentences.length > 0 && [3, 4, 5, 6, 7].includes(step) && `— Frase ${sentenceIndex + 1} de ${sentences.length}`}
+                <div className="mb-2">
+                  <div className="text-center text-sm font-medium text-neutral-400 mb-1.5">
+                    <span>{t.stepCount(selectedStep)}</span>
+                  </div>
+                  <div className="w-full bg-neutral-800 h-1.5 rounded-full overflow-hidden">
+                    <div
+                      className="bg-blue-500 h-full transition-all duration-300"
+                      style={{ width: `${(selectedStep / 8) * 100}%` }}
+                    />
+                  </div>
                 </div>
 
-                <div className="bg-neutral-950/60 p-3 rounded-xl border border-neutral-800">
-                  {[1, 2, 8].includes(step) ? (
-                    <audio
-                      key={`full-${selectedLevel}-${step}`}
-                      controls
-                      src={levelData?.audio}
-                      className="w-full h-8"
-                    />
-                  ) : step === 7 ? (
-                    <p className="text-xs text-neutral-500 text-center py-1">Sem áudio nesta etapa (Leitura Solo)</p>
-                  ) : (
-                    <audio
-                      key={`sent-${selectedLevel}-${step}-${sentenceIndex}`}
-                      controls
-                      src={(levelData as any)?.sentenceAudios?.[sentenceIndex]}
-                      className="w-full h-8"
-                    />
+                <div className="bg-neutral-950/60 p-3 rounded-xl border border-neutral-800/80">
+                  {selectedStep === 1 && (
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step1Instruction}</p>
+                      <audio controls src={levelData?.audio} className="w-full h-8" />
+                    </div>
+                  )}
+
+                  {selectedStep === 2 && (
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step2Instruction}</p>
+                      <audio controls src={levelData?.audio} className="w-full h-8" />
+                    </div>
+                  )}
+
+                  {selectedStep === 3 && (
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step3Instruction}</p>
+                      <audio controls src={(levelData as any)?.sentenceAudios?.[0]} className="w-full h-8 mb-1.5" />
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">{t.sentenceCount}</span>
+                    </div>
+                  )}
+
+                  {selectedStep === 4 && (
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step4Instruction}</p>
+                      <audio controls src={(levelData as any)?.sentenceAudios?.[0]} className="w-full h-8 mb-1.5" />
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">{t.sentenceCount}</span>
+                    </div>
+                  )}
+
+                  {selectedStep === 5 && (
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step5Instruction}</p>
+                      <audio controls src={(levelData as any)?.sentenceAudios?.[0]} className="w-full h-8 mb-1.5" />
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">{t.sentenceCount}</span>
+                    </div>
+                  )}
+
+                  {selectedStep === 6 && (
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step6Instruction}</p>
+                      <audio controls src={(levelData as any)?.sentenceAudios?.[0]} className="w-full h-8 mb-1.5" />
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">{t.sentenceCount}</span>
+                    </div>
+                  )}
+
+                  {selectedStep === 7 && (
+                    <div className="flex flex-col items-center text-center gap-1">
+                      <p className="text-sm text-neutral-300">{t.step7Instruction}</p>
+                      <span className="text-xs sm:text-sm text-neutral-400 font-medium">{t.sentenceCount}</span>
+                      <span className="text-xs text-neutral-500 font-mono mt-0.5">{t.step7NoAudio}</span>
+                    </div>
+                  )}
+
+                  {selectedStep === 8 && (
+                    <div className="text-center">
+                      <p className="text-sm text-neutral-300 mb-2">{t.step8Instruction}</p>
+                      <audio controls src={levelData?.audio} className="w-full h-8" />
+                    </div>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* ÁREA INTERATIVA DO EXERCÍCIO */}
-            <div className="flex-1 flex flex-col justify-between mt-2">
-              
-              {/* ETAPA 1: GIST */}
-              {step === 1 && (
-                <div>
-                  <div className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 mb-3">
-                    <p className="text-sm font-semibold text-neutral-200 mb-2">
-                      {(levelData as any)?.gistQuestion?.question}
+            {/* ÁREA INFERIOR */}
+            <div className="flex-1 flex flex-col justify-between min-h-0">
+              {/* PASSO 1 */}
+              {selectedStep === 1 && (
+                <div className="flex-1 flex flex-col justify-between">
+                  <div className="p-3 bg-neutral-950 rounded-xl border border-neutral-800">
+                    <p className="text-base font-semibold text-neutral-200 mb-2.5 text-center">
+                      {t.step1Question}
                     </p>
                     <div className="space-y-2">
                       {(levelData as any)?.gistQuestion?.options.map((opt: string, idx: number) => (
@@ -286,7 +395,7 @@ export default function TestPage() {
                               ? gistSelected === (levelData as any)?.gistQuestion?.correct
                                 ? 'border-emerald-500 bg-emerald-950/40 text-emerald-200'
                                 : 'border-rose-500 bg-rose-950/40 text-rose-200'
-                              : 'border-neutral-800 bg-neutral-900 text-neutral-300'
+                              : 'border-neutral-800 bg-neutral-900 text-neutral-300 hover:border-neutral-700'
                           }`}
                         >
                           {opt}
@@ -295,220 +404,264 @@ export default function TestPage() {
                     </div>
                   </div>
                   <button
-                    onClick={() => setStep(2)}
-                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
+                    onClick={() => setSelectedStep(2)}
+                    className="w-full mt-3 py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
                   >
-                    Avançar para Etapa 2 (Livre) →
+                    {t.step1Btn}
                   </button>
                 </div>
               )}
 
-              {/* ETAPA 2: GAPS */}
-              {step === 2 && (
-                <div>
-                  <div className="p-3 bg-neutral-950 rounded-xl border border-neutral-800 text-sm text-neutral-300 leading-relaxed mb-3 text-justify">
-                    {sentences.map((sent: string, sIdx: number) => {
-                      const gapObj = gapsData.find((g: any) => g.sentenceIndex === sIdx);
-                      if (!gapObj) return <span key={sIdx}>{sent} </span>;
-                      const parts = sent.split(new RegExp(`\\b${gapObj.target}\\b`, 'i'));
-                      const gapIdx = gapsData.indexOf(gapObj);
-                      const isAnswered = gapAnswers[gapIdx] === gapObj.target;
-                      return (
-                        <span key={sIdx}>
-                          {parts[0]}
-                          <span className={`px-2 py-0.5 rounded font-bold border ${isAnswered ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300' : 'bg-neutral-800 border-neutral-700 text-blue-400'}`}>
-                            {gapAnswers[gapIdx] || `[ Lacuna ${gapIdx + 1} ]`}
-                          </span>
-                          {parts[1] || ''}{' '}
-                        </span>
-                      );
-                    })}
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
-                    {gapsData.map((gap: any, gIdx: number) => (
-                      <div key={gIdx} className="p-2.5 bg-neutral-950 rounded-lg border border-neutral-800">
-                        <span className="text-xs font-semibold text-neutral-400 block mb-1 text-center">Lacuna {gIdx + 1}</span>
-                        <div className="flex gap-1.5">
-                          {gap.options.map((opt: string, oIdx: number) => (
-                            <button
-                              key={oIdx}
-                              onClick={() => setGapAnswers((prev) => ({ ...prev, [gIdx]: opt }))}
-                              className={`flex-1 py-1 rounded text-xs font-medium border transition ${
-                                gapAnswers[gIdx] === opt ? (opt === gap.target ? 'bg-emerald-950 border-emerald-500 text-emerald-300' : 'bg-rose-950 border-rose-500 text-rose-300') : 'bg-neutral-900 border-neutral-800 text-neutral-300'
+              {/* PASSO 2 */}
+              {selectedStep === 2 && (
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="p-3.5 bg-neutral-950 rounded-xl border border-neutral-800 text-sm sm:text-base text-neutral-300 leading-relaxed mb-3 text-justify">
+                      {sentences.map((sent: string, sIdx: number) => {
+                        const gapObj = gapsData.find((g: any) => g.sentenceIndex === sIdx);
+                        if (!gapObj) return <span key={sIdx}>{sent} </span>;
+                        const parts = sent.split(new RegExp(`\\b${gapObj.target}\\b`, 'i'));
+                        const gapIdx = gapsData.indexOf(gapObj);
+                        const isAnswered = gapAnswers[gapIdx] === gapObj.target;
+                        return (
+                          <span key={sIdx}>
+                            {parts[0]}
+                            <span
+                              className={`px-2 py-0.5 rounded font-bold border ${
+                                isAnswered
+                                  ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300'
+                                  : 'bg-neutral-800 border-neutral-700 text-blue-400'
                               }`}
                             >
-                              {opt}
-                            </button>
-                          ))}
+                              {gapAnswers[gapIdx] || t.step2GapTag(gapIdx + 1)}
+                            </span>
+                            {parts[1] || ''}{' '}
+                          </span>
+                        );
+                      })}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-2">
+                      {gapsData.map((gap: any, gIdx: number) => (
+                        <div key={gIdx} className="p-2.5 bg-neutral-950 rounded-lg border border-neutral-800">
+                          <span className="text-xs font-semibold text-neutral-400 block mb-1.5 text-center uppercase tracking-wider">
+                            {t.step2GapLabel(gIdx + 1)}
+                          </span>
+                          <div className="flex gap-1.5">
+                            {gap.options.map((opt: string, oIdx: number) => (
+                              <button
+                                key={oIdx}
+                                onClick={() => setGapAnswers((prev) => ({ ...prev, [gIdx]: opt }))}
+                                className={`flex-1 py-1.5 rounded text-sm font-medium border transition ${
+                                  gapAnswers[gIdx] === opt
+                                    ? opt === gap.target
+                                      ? 'bg-emerald-950 border-emerald-500 text-emerald-300'
+                                      : 'bg-rose-950 border-rose-500 text-rose-300'
+                                    : 'bg-neutral-900 border-neutral-800 text-neutral-300 hover:border-neutral-700'
+                                }`}
+                              >
+                                {opt}
+                              </button>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
 
                   <button
-                    onClick={() => {
-                      setSentenceIndex(0);
-                      setStep(3);
-                    }}
-                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
+                    onClick={() => setSelectedStep(3)}
+                    className="w-full mt-2 py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
                   >
-                    Avançar para Etapa 3 (Livre) →
+                    {t.step2Btn}
                   </button>
                 </div>
               )}
 
-              {/* ETAPA 3: CHUNKS */}
-              {step === 3 && (
-                <div>
-                  <div className="min-h-12 p-3 bg-neutral-950 border border-dashed border-neutral-700 rounded-xl flex flex-wrap gap-2 items-center justify-center mb-3">
-                    {selectedSlots.length === 0 ? (
-                      <span className="text-xs text-neutral-500">Toque nos blocos abaixo...</span>
-                    ) : (
-                      selectedSlots.map((slot) => (
-                        <button
-                          key={slot.id}
-                          onClick={() => setSelectedSlots((prev) => prev.filter((s) => s.id !== slot.id))}
-                          className="px-2.5 py-1 bg-blue-600 border border-blue-500 text-white text-xs font-medium rounded-lg"
-                        >
-                          {slot.text}
-                        </button>
-                      ))
-                    )}
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mb-3 justify-center">
-                    {bankSlots.map((slot) => {
-                      const isSelected = selectedSlots.some((s) => s.id === slot.id);
-                      return (
-                        <button
-                          key={slot.id}
-                          disabled={isSelected}
-                          onClick={() => setSelectedSlots((prev) => [...prev, slot])}
-                          className={`px-2.5 py-1 text-xs font-medium rounded-lg border transition ${
-                            isSelected ? 'opacity-20 pointer-events-none' : 'bg-neutral-800 border-neutral-700 text-neutral-300'
-                          }`}
-                        >
-                          {slot.text}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {orderFeedback && (
-                    <p className={`text-xs font-semibold mb-2 text-center ${orderFeedback === 'correct' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      {orderFeedback === 'correct' ? 'Ordem correta!' : 'Ordem incorreta.'}
-                    </p>
-                  )}
-
-                  <div className="flex gap-2">
-                    <button onClick={checkOrder} className="w-1/2 py-2 bg-neutral-800 hover:bg-neutral-700 font-semibold rounded-xl text-xs">
-                      Checar Ordem
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (sentenceIndex + 1 < sentences.length) setSentenceIndex(sentenceIndex + 1);
-                        else { setSentenceIndex(0); setStep(4); }
-                      }}
-                      className="w-1/2 py-2 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-xs"
-                    >
-                      Próxima Frase / Etapa (Livre)
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* ETAPA 4: DITADO */}
-              {step === 4 && (
-                <div>
-                  <textarea
-                    value={typedInput}
-                    disabled={isTypingLocked}
-                    onChange={(e) => setTypedInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        if (!isTypingLocked) checkTyping();
-                      }
-                    }}
-                    placeholder="Digite a frase aqui e aperte Enter..."
-                    rows={2}
-                    className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 mb-2 resize-none"
-                  />
-
-                  {typingFeedback && (
-                    <div className="mb-2 text-center">
-                      {typingFeedback === 'correct' ? (
-                        <p className="text-xs font-semibold text-emerald-400">Frase correta!</p>
+              {/* PASSO 3 */}
+              {selectedStep === 3 && (
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="min-h-14 p-3 bg-neutral-950 border border-dashed border-neutral-700 rounded-xl flex flex-wrap gap-2 items-center justify-center mb-3">
+                      {selectedSlots.length === 0 ? (
+                        <span className="text-sm text-neutral-500">{t.step3Prompt}</span>
                       ) : (
-                        <div className="p-2.5 bg-rose-950/40 border border-rose-900/60 rounded-xl text-center mb-1.5">
-                          <span className="text-xs font-semibold text-rose-400 block mb-1">Diferente do esperado</span>
-                          <p className="text-xs font-medium text-white italic">"{currentSentence}"</p>
+                        selectedSlots.map((slot) => (
                           <button
-                            type="button"
-                            onClick={() => setIsTypingLocked(false)}
-                            className="mt-2 px-3 py-1 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded text-xs"
+                            key={slot.id}
+                            onClick={() => setSelectedSlots((prev) => prev.filter((s) => s.id !== slot.id))}
+                            className="px-3 py-1.5 bg-blue-600 border border-blue-500 text-white text-sm font-medium rounded-lg hover:bg-rose-600 hover:border-rose-500 transition shadow-sm"
                           >
-                            Tentar de novo
+                            {slot.text}
                           </button>
-                        </div>
+                        ))
                       )}
                     </div>
-                  )}
+
+                    <div className="flex flex-wrap gap-2 mb-3 justify-center">
+                      {bankSlots.map((slot) => {
+                        const isSelected = selectedSlots.some((s) => s.id === slot.id);
+                        return (
+                          <button
+                            key={slot.id}
+                            disabled={isSelected}
+                            onClick={() => setSelectedSlots((prev) => [...prev, slot])}
+                            className={`px-3 py-1.5 text-sm font-medium rounded-lg border transition ${
+                              isSelected
+                                ? 'border-dashed border-neutral-800/80 bg-neutral-950/40 text-transparent select-none pointer-events-none cursor-default'
+                                : 'bg-neutral-800 border-neutral-700 text-neutral-300 hover:bg-neutral-700 hover:border-neutral-600'
+                            }`}
+                          >
+                            {slot.text}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {orderFeedback && (
+                      <p className={`text-sm font-semibold mb-2 text-center ${orderFeedback === 'correct' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        {orderFeedback === 'correct' ? t.step3Correct : t.step3Wrong}
+                      </p>
+                    )}
+                  </div>
 
                   <div className="flex gap-2">
-                    <button onClick={checkTyping} className="w-1/2 py-2 bg-neutral-800 hover:bg-neutral-700 font-semibold rounded-xl text-xs">
-                      Checar (Enter)
+                    <button onClick={checkOrder} className="w-1/2 py-2.5 bg-neutral-800 hover:bg-neutral-700 font-semibold rounded-xl text-sm transition">
+                      {t.step3CheckBtn}
                     </button>
                     <button
-                      onClick={() => {
-                        if (sentenceIndex + 1 < sentences.length) setSentenceIndex(sentenceIndex + 1);
-                        else { setSentenceIndex(0); setStep(5); }
-                      }}
-                      className="w-1/2 py-2 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-xs"
+                      onClick={() => setSelectedStep(4)}
+                      className="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
                     >
-                      Próxima Frase / Etapa (Livre)
+                      {t.step3NextBtn}
                     </button>
                   </div>
                 </div>
               )}
 
-              {/* ETAPAS 5, 6 E 7: REPETIÇÃO E LEITURA */}
-              {[5, 6, 7].includes(step) && (
-                <div className="flex-1 flex flex-col justify-between text-center">
-                  <div className="p-4 bg-neutral-950 border border-neutral-800 rounded-xl text-sm sm:text-base font-medium text-neutral-200 my-auto">
-                    {step === 6 ? (
-                      <span className="text-neutral-500 italic">🎧 Texto oculto (Repetição sem texto)</span>
-                    ) : (
-                      `"${currentSentence}"`
+              {/* PASSO 4 */}
+              {selectedStep === 4 && (
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    <textarea
+                      value={typedInput}
+                      disabled={isTypingLocked}
+                      onChange={(e) => setTypedInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          if (!isTypingLocked) checkTyping();
+                        }
+                      }}
+                      placeholder={t.step4Placeholder}
+                      rows={2}
+                      className={`w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-sm sm:text-base focus:outline-none focus:border-blue-500 mb-2 resize-none ${
+                        isTypingLocked ? 'opacity-60 cursor-not-allowed' : ''
+                      }`}
+                    />
+
+                    {typingFeedback && (
+                      <div className="mb-2 text-center">
+                        {typingFeedback === 'correct' ? (
+                          <p className="text-sm font-semibold text-emerald-400">{t.step4Correct}</p>
+                        ) : (
+                          <div className="flex flex-col items-center gap-2">
+                            <div className="p-3 bg-rose-950/40 border border-rose-900/60 rounded-xl w-full text-center">
+                              <span className="text-sm font-semibold text-rose-400 block mb-1.5">{t.step4Wrong}</span>
+                              <div className="text-sm text-neutral-200">
+                                <span className="text-xs text-neutral-400 uppercase tracking-wider block mb-0.5">
+                                  {t.step4CorrectSentenceLabel}
+                                </span>
+                                <p className="font-medium text-white italic">"{currentSentence}"</p>
+                              </div>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsTypingLocked(false);
+                                setTypingFeedback(null);
+                              }}
+                              className="px-4 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-neutral-200 rounded-lg text-sm font-medium transition"
+                            >
+                              {t.step4Retry}
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
+
+                  <div className="flex gap-2">
+                    <button onClick={checkTyping} className="w-1/2 py-2.5 bg-neutral-800 hover:bg-neutral-700 font-semibold rounded-xl text-sm transition">
+                      {t.step4CheckBtn}
+                    </button>
+                    <button
+                      onClick={() => setSelectedStep(5)}
+                      className="w-1/2 py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
+                    >
+                      {t.step4NextBtn}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* PASSO 5 */}
+              {selectedStep === 5 && (
+                <div className="flex-1 flex flex-col justify-between text-center">
+                  <div className="p-4 bg-neutral-950 border border-neutral-800 rounded-xl text-base sm:text-lg font-medium text-neutral-200 my-auto">
+                    "{currentSentence}"
+                  </div>
                   <button
-                    onClick={() => {
-                      if (sentenceIndex + 1 < sentences.length) setSentenceIndex(sentenceIndex + 1);
-                      else { setSentenceIndex(0); setStep(step + 1); }
-                    }}
+                    onClick={() => setSelectedStep(6)}
                     className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
                   >
-                    Avançar Frase / Etapa (Livre) →
+                    {t.nextSentenceBtn}
                   </button>
                 </div>
               )}
 
-              {/* ETAPA 8: TEXTO INTEGRAL */}
-              {step === 8 && (
-                <div>
-                  <div className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-200 leading-relaxed text-sm mb-3 text-justify">
+              {/* PASSO 6 */}
+              {selectedStep === 6 && (
+                <div className="flex-1 flex flex-col justify-between text-center">
+                  <div className="p-6 bg-neutral-950/60 border border-dashed border-neutral-800 rounded-xl my-auto flex flex-col items-center justify-center">
+                    <span className="text-3xl mb-1.5">🎧</span>
+                    <span className="text-sm text-neutral-500 font-medium">{t.step6Hidden}</span>
+                  </div>
+                  <button
+                    onClick={() => setSelectedStep(7)}
+                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
+                  >
+                    {t.nextSentenceBtn}
+                  </button>
+                </div>
+              )}
+
+              {/* PASSO 7 */}
+              {selectedStep === 7 && (
+                <div className="flex-1 flex flex-col justify-between text-center">
+                  <div className="p-4 bg-neutral-950 border border-neutral-800 rounded-xl text-base sm:text-lg font-medium text-neutral-200 my-auto">
+                    "{currentSentence}"
+                  </div>
+                  <button
+                    onClick={() => setSelectedStep(8)}
+                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 font-semibold rounded-xl text-sm transition"
+                  >
+                    {t.nextSentenceBtn}
+                  </button>
+                </div>
+              )}
+
+              {/* PASSO 8 */}
+              {selectedStep === 8 && (
+                <div className="flex-1 flex flex-col justify-between">
+                  <div className="p-4 bg-neutral-950 rounded-xl border border-neutral-800 text-neutral-200 leading-relaxed text-sm sm:text-base mb-3 text-justify">
                     {levelData?.fullText}
                   </div>
                   <button
-                    onClick={() => {
-                      setStep(1);
-                      setSentenceIndex(0);
-                    }}
+                    onClick={() => setSelectedStep(1)}
                     className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 font-semibold rounded-xl text-sm transition"
                   >
-                    Concluir e Voltar à Etapa 1
+                    {t.step8CompleteBtn}
                   </button>
                 </div>
               )}
