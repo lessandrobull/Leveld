@@ -1,0 +1,411 @@
+{
+  "id": "02-remote-work",
+  "title": "Remote Work & Digital Nomads",
+  "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop",
+  "voice": "Andrew",
+  "sponsor": {
+    "text": "Pratique conversação diária com nativos na Cambly.",
+    "link": "https://www.cambly.com"
+  },
+  "levels": {
+    "A1": {
+      "fullText": "Many people work on their computers at home. They have meetings online every week. A quiet room is good for working. Remote workers can live in different cities.",
+      "sentences": [
+        "Many people work on their computers at home.",
+        "They have meetings online every week.",
+        "A quiet room is good for working.",
+        "Remote workers can live in different cities."
+      ],
+      "audio": "/audio/02-remote-work/a1.mp3",
+      "sentenceAudios": [
+        "/audio/02-remote-work/a1_s0.mp3",
+        "/audio/02-remote-work/a1_s1.mp3",
+        "/audio/02-remote-work/a1_s2.mp3",
+        "/audio/02-remote-work/a1_s3.mp3"
+      ],
+      "chunks": [
+        [
+          "Many people",
+          "work",
+          "on their computers",
+          "at home."
+        ],
+        [
+          "They",
+          "have meetings",
+          "online",
+          "every week."
+        ],
+        [
+          "A quiet room",
+          "is good",
+          "for working."
+        ],
+        [
+          "Remote workers",
+          "can live",
+          "in different cities."
+        ]
+      ],
+      "gistQuestion": {
+        "question": "Qual é o tema principal deste texto?",
+        "options": [
+          "Como as pessoas trabalham usando o computador em casa",
+          "Por que reuniões online não funcionam",
+          "Como comprar móveis para o escritório"
+        ],
+        "correct": 0
+      },
+      "gaps": [
+        {
+          "target": "computers",
+          "options": ["computers", "guitars", "bicycles"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "meetings",
+          "options": ["parties", "meetings", "games"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "cities",
+          "options": ["forests", "planets", "cities"],
+          "sentenceIndex": 3
+        }
+      ]
+    },
+    "A2": {
+      "fullText": "Remote work gives people more freedom in their daily routine. Professionals do not need to commute to the office every morning. They use video calls and messages to stay connected with coworkers. Many companies now hire talented workers from all over the world.",
+      "sentences": [
+        "Remote work gives people more freedom in their daily routine.",
+        "Professionals do not need to commute to the office every morning.",
+        "They use video calls and messages to stay connected with coworkers.",
+        "Many companies now hire talented workers from all over the world."
+      ],
+      "audio": "/audio/02-remote-work/a2.mp3",
+      "sentenceAudios": [
+        "/audio/02-remote-work/a2_s0.mp3",
+        "/audio/02-remote-work/a2_s1.mp3",
+        "/audio/02-remote-work/a2_s2.mp3",
+        "/audio/02-remote-work/a2_s3.mp3"
+      ],
+      "chunks": [
+        [
+          "Remote work",
+          "gives people",
+          "more freedom",
+          "in their daily routine."
+        ],
+        [
+          "Professionals",
+          "do not need",
+          "to commute",
+          "to the office",
+          "every morning."
+        ],
+        [
+          "They",
+          "use video calls",
+          "and messages",
+          "to stay connected",
+          "with coworkers."
+        ],
+        [
+          "Many companies",
+          "now hire",
+          "talented workers",
+          "from",
+          "all over the world."
+        ]
+      ],
+      "gistQuestion": {
+        "question": "Qual benefício do trabalho remoto é destacado no texto?",
+        "options": [
+          "Maior flexibilidade na rotina e contratações globais",
+          "A obrigatoriedade de morar no mesmo país da empresa",
+          "O fim definitivo do uso de mensagens e chamadas de vídeo"
+        ],
+        "correct": 0
+      },
+      "gaps": [
+        {
+          "target": "freedom",
+          "options": ["freedom", "trouble", "danger"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "commute",
+          "options": ["sleep", "commute", "dance"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "talented",
+          "options": ["angry", "lazy", "talented"],
+          "sentenceIndex": 3
+        }
+      ]
+    },
+    "B1": {
+      "fullText": "The rise of remote work has fundamentally changed the relationship between career and location. Instead of staying in crowded urban centers, professionals often relocate to smaller towns with better living conditions. However, managing productivity requires clear boundaries between personal life and professional obligations.",
+      "sentences": [
+        "The rise of remote work has fundamentally changed the relationship between career and location.",
+        "Instead of staying in crowded urban centers, professionals often relocate to smaller towns with better living conditions.",
+        "However, managing productivity requires clear boundaries between personal life and professional obligations."
+      ],
+      "audio": "/audio/02-remote-work/b1.mp3",
+      "sentenceAudios": [
+        "/audio/02-remote-work/b1_s0.mp3",
+        "/audio/02-remote-work/b1_s1.mp3",
+        "/audio/02-remote-work/b1_s2.mp3"
+      ],
+      "chunks": [
+        [
+          "The rise",
+          "of remote work",
+          "has fundamentally changed",
+          "the relationship",
+          "between career",
+          "and location."
+        ],
+        [
+          "Instead of staying",
+          "in crowded urban centers,",
+          "professionals",
+          "often relocate",
+          "to smaller towns",
+          "with better",
+          "living conditions."
+        ],
+        [
+          "However,",
+          "managing productivity",
+          "requires",
+          "clear boundaries",
+          "between personal life",
+          "and professional obligations."
+        ]
+      ],
+      "gistQuestion": {
+        "question": "What primary trade-off or challenge does the text present regarding remote work?",
+        "options": [
+          "Balancing personal lifestyle freedom with productivity boundaries",
+          "The necessity of remaining permanently in major metropolitan areas",
+          "The complete elimination of career mobility"
+        ],
+        "correct": 0
+      },
+      "gaps": [
+        {
+          "target": "fundamentally",
+          "options": ["fundamentally", "rarely", "briefly"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "relocate",
+          "options": ["refuse", "relocate", "complain"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "boundaries",
+          "options": ["boundaries", "excuses", "conflicts"],
+          "sentenceIndex": 2
+        }
+      ]
+    },
+    "B2": {
+      "fullText": "Digital nomadism represents an unprecedented shift toward location-independent careers and continuous travel. Companies must adapt their corporate culture to asynchronous collaboration, replacing traditional oversight with outcome-based evaluation. Consequently, coastal towns and historic cities are developing specialized infrastructure to accommodate global remote workers.",
+      "sentences": [
+        "Digital nomadism represents an unprecedented shift toward location-independent careers and continuous travel.",
+        "Companies must adapt their corporate culture to asynchronous collaboration, replacing traditional oversight with outcome-based evaluation.",
+        "Consequently, coastal towns and historic cities are developing specialized infrastructure to accommodate global remote workers."
+      ],
+      "audio": "/audio/02-remote-work/b2.mp3",
+      "sentenceAudios": [
+        "/audio/02-remote-work/b2_s0.mp3",
+        "/audio/02-remote-work/b2_s1.mp3",
+        "/audio/02-remote-work/b2_s2.mp3"
+      ],
+      "chunks": [
+        [
+          "Digital nomadism",
+          "represents",
+          "an unprecedented shift",
+          "toward location-independent careers",
+          "and continuous travel."
+        ],
+        [
+          "Companies",
+          "must adapt",
+          "their corporate culture",
+          "to asynchronous collaboration,",
+          "replacing",
+          "traditional oversight",
+          "with outcome-based evaluation."
+        ],
+        [
+          "Consequently,",
+          "coastal towns",
+          "and historic cities",
+          "are developing",
+          "specialized infrastructure",
+          "to accommodate",
+          "global remote workers."
+        ]
+      ],
+      "gistQuestion": {
+        "question": "How are companies and municipalities adapting to the digital nomad movement?",
+        "options": [
+          "Through asynchronous evaluation models and dedicated local infrastructure",
+          "By banning cross-border remote work arrangements entirely",
+          "By enforcing rigid 9-to-5 synchronous office presence"
+        ],
+        "correct": 0
+      },
+      "gaps": [
+        {
+          "target": "unprecedented",
+          "options": ["unprecedented", "unimportant", "temporary"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "asynchronous",
+          "options": ["passive", "asynchronous", "chaotic"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "accommodate",
+          "options": ["accommodate", "restrict", "discourage"],
+          "sentenceIndex": 2
+        }
+      ]
+    },
+    "C1": {
+      "fullText": "The widespread adoption of distributed workforce models has dismantled the historic synchronization of physical presence and professional output. Knowledge workers increasingly leverage geographic arbitrage, optimizing their standard of living while sustaining high-value global consulting roles. Nevertheless, this decentralized dynamic introduces complex challenges surrounding civic disconnection, isolation, and domestic tax legislation.",
+      "sentences": [
+        "The widespread adoption of distributed workforce models has dismantled the historic synchronization of physical presence and professional output.",
+        "Knowledge workers increasingly leverage geographic arbitrage, optimizing their standard of living while sustaining high-value global consulting roles.",
+        "Nevertheless, this decentralized dynamic introduces complex challenges surrounding civic disconnection, isolation, and domestic tax legislation."
+      ],
+      "audio": "/audio/02-remote-work/c1.mp3",
+      "sentenceAudios": [
+        "/audio/02-remote-work/c1_s0.mp3",
+        "/audio/02-remote-work/c1_s1.mp3",
+        "/audio/02-remote-work/c1_s2.mp3"
+      ],
+      "chunks": [
+        [
+          "The widespread adoption",
+          "of distributed workforce models",
+          "has dismantled",
+          "the historic synchronization",
+          "of physical presence",
+          "and professional output."
+        ],
+        [
+          "Knowledge workers",
+          "increasingly leverage",
+          "geographic arbitrage, optimizing",
+          "their standard of living",
+          "while sustaining",
+          "high-value",
+          "global consulting roles."
+        ],
+        [
+          "Nevertheless,",
+          "this decentralized dynamic",
+          "introduces",
+          "complex challenges",
+          "surrounding",
+          "civic disconnection,",
+          "isolation,",
+          "and domestic tax legislation."
+        ]
+      ],
+      "gistQuestion": {
+        "question": "What dual reality of the distributed workforce does the passage illustrate?",
+        "options": [
+          "Financial optimization via geographic arbitrage contrasted with civic and regulatory friction",
+          "The complete superiority of local office employment over global consulting",
+          "The elimination of tax burdens for professionals living abroad"
+        ],
+        "correct": 0
+      },
+      "gaps": [
+        {
+          "target": "synchronization",
+          "options": ["synchronization", "destruction", "neglect"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "arbitrage",
+          "options": ["arbitrage", "isolation", "penalty"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "decentralized",
+          "options": ["decentralized", "stagnant", "monopolized"],
+          "sentenceIndex": 2
+        }
+      ]
+    },
+    "C2": {
+      "fullText": "The paradigm of remote labor deconstructs the longstanding industrial dichotomy between sovereign private existence and metropolitan institutional belonging. By untethering intellectual capital from sedentary corporate architecture, remote work cultivates a fluid cosmopolitan class that fundamentally destabilizes regional housing markets and traditional civic identity.",
+      "sentences": [
+        "The paradigm of remote labor deconstructs the longstanding industrial dichotomy between sovereign private existence and metropolitan institutional belonging.",
+        "By untethering intellectual capital from sedentary corporate architecture, remote work cultivates a fluid cosmopolitan class that fundamentally destabilizes regional housing markets and traditional civic identity."
+      ],
+      "audio": "/audio/02-remote-work/c2.mp3",
+      "sentenceAudios": [
+        "/audio/02-remote-work/c2_s0.mp3",
+        "/audio/02-remote-work/c2_s1.mp3"
+      ],
+      "chunks": [
+        [
+          "The paradigm of remote labor",
+          "deconstructs",
+          "the longstanding industrial dichotomy",
+          "between",
+          "sovereign private existence",
+          "and metropolitan institutional belonging."
+        ],
+        [
+          "By untethering",
+          "intellectual capital",
+          "from sedentary corporate architecture,",
+          "remote work",
+          "cultivates",
+          "a fluid cosmopolitan class",
+          "that fundamentally destabilizes",
+          "regional housing markets",
+          "and traditional civic identity."
+        ]
+      ],
+      "gistQuestion": {
+        "question": "What is the central philosophical thesis regarding remote labor in the text?",
+        "options": [
+          "It dissolves the industrial divide between private life and institutional space, reshaping civic and economic structures",
+          "It reinforces the necessity of sedentary corporate headquarters in modern capital markets",
+          "It serves merely as a temporary response to corporate office shortages"
+        ],
+        "correct": 0
+      },
+      "gaps": [
+        {
+          "target": "dichotomy",
+          "options": ["dichotomy", "harmony", "fragility"],
+          "sentenceIndex": 0
+        },
+        {
+          "target": "untethering",
+          "options": ["untethering", "confining", "anchoring"],
+          "sentenceIndex": 1
+        },
+        {
+          "target": "destabilizes",
+          "options": ["destabilizes", "replicates", "consolidates"],
+          "sentenceIndex": 1
+        }
+      ]
+    }
+  }
+}
